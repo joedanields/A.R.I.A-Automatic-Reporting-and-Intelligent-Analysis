@@ -1,0 +1,41 @@
+Doctor: Good morning! Please have a seat. What brings you in today?
+
+Patient: Good morning, doctor. I've been having some issues with my sugars lately. They've been running high despite taking my medication regularly.
+
+Doctor: I see. How long have you been diabetic?
+
+Patient: About 5 years now. I'm on Metformin 500mg twice a day.
+
+Doctor: And what readings have you been getting?
+
+Patient: Fasting is around 180-200, and after meals it goes up to 280 sometimes.
+
+Doctor: That's definitely elevated. Any other symptoms? Are you experiencing increased thirst or frequent urination?
+
+Patient: Yes, actually. I've been drinking a lot of water and running to the bathroom every hour. Also been feeling quite tired lately, kamzori type feeling.
+
+Doctor: Any chakkar or giddiness?
+
+Patient: Yes, especially when I stand up quickly. Also having some headaches.
+
+Doctor: How about your BP - have you been monitoring it?
+
+Patient: I checked last week, it was 150/95. My ticker feels like it's racing sometimes.
+
+Doctor: Those palpitations need to be looked at. Any chest pain or shortness of breath?
+
+Patient: Some breathlessness when I climb stairs, but no chest pain.
+
+Doctor: Okay. Let me check your vitals. Your BP is 148/92 currently, heart rate 96. I can hear some rapid heartbeat. 
+
+Patient: Is that serious?
+
+Doctor: We need to manage it. Looking at your symptoms - elevated blood glucose, hypertension, palpitations, and fatigue - I'm going to adjust your diabetes medication and start you on a BP medication. I'll also order some blood tests including HbA1c and a lipid profile.
+
+Patient: Okay doctor. Should I worry about anything?
+
+Doctor: No need to worry, but please follow up in 2 weeks. Reduce your salt intake, walk for 30 minutes daily, and monitor your sugars regularly. I'm prescribing Metformin XR 1000mg once daily and Amlodipine 5mg for your blood pressure.
+
+Patient: Thank you, doctor.
+
+Doctor: You're welcome. Please collect your prescription from the front desk. Take care!

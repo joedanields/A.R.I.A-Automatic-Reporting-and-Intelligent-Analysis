@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useCallback, useEffect, useMemo } from "react";
-import { Mic, MicOff, Sparkles, Activity, Wifi, WifiOff } from "lucide-react";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { Mic, MicOff, Sparkles, Activity, Wifi, WifiOff, Upload, FileText } from "lucide-react";
 
 import { useAudioCapture } from "@/hooks/useAudioCapture";
 import { useWebSocket } from "@/hooks/useWebSocket";
@@ -50,6 +50,9 @@ export default function Home() {
   const [isCompliant, setIsCompliant] = useState(false);
   const [missingFields, setMissingFields] = useState<string[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  // File upload ref
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Audio capture with WebSocket streaming
   const handleAudioChunk = useCallback(
@@ -196,6 +199,48 @@ export default function Home() {
     }, 300);
   };
 
+  // Handle file upload
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+
+      if (!isConnected) {
+        connect();
+      }
+
+      // Reset state
+      setTranscriptSegments([{ text, timestamp: new Date().toISOString() }]);
+      setThoughts([
+        {
+          message: `Uploaded file: ${file.name}`,
+          timestamp: new Date(),
+          type: "info",
+          agent: "system",
+        },
+      ]);
+      setSoapNote(null);
+      setIcdCodes([]);
+      setIsCompliant(false);
+      setMissingFields([]);
+      setIsProcessing(true);
+
+      // Process the uploaded text
+      setTimeout(() => {
+        sendAction("test", { text });
+      }, 300);
+
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    } catch (err) {
+      console.error("Failed to read file:", err);
+    }
+  };
+
   // Connection status
   useEffect(() => {
     // Auto-connect on mount
@@ -248,6 +293,25 @@ export default function Home() {
             >
               Demo Mode
             </button>
+
+            {/* Upload button */}
+            <label className="cursor-pointer">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".txt,.text"
+                onChange={handleFileUpload}
+                className="hidden"
+                disabled={isProcessing || isRecording}
+              />
+              <span
+                className={`flex items-center gap-2 px-3 py-1.5 text-sm bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white rounded-lg transition-all ${isProcessing || isRecording ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+              >
+                <Upload className="w-4 h-4" />
+                Upload Transcript
+              </span>
+            </label>
 
             {/* Record button */}
             <button
