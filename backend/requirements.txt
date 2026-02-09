@@ -1,0 +1,28 @@
+# Backend Dependencies for A.R.I.A.
+# Optimized for NVIDIA GTX 1650 (4GB VRAM)
+
+# Web Framework
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+python-multipart>=0.0.6
+websockets>=12.0
+
+# ASR - Faster Whisper with CTranslate2 (Int8 Quantization)
+faster-whisper>=1.0.0
+
+# LLM Orchestration - Using compatible versions
+langgraph>=0.2.0
+langchain>=0.3.0
+langchain-community>=0.3.0
+langchain-ollama>=0.2.0
+
+# Vector Database (CPU-based to save VRAM)
+chromadb>=0.5.0
+
+# Audio Processing
+pydub>=0.25.1
+numpy>=1.26.0
+
+# Utilities
+python-dotenv>=1.0.0
+pydantic>=2.6.0
