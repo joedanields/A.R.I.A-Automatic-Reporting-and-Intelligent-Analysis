@@ -1,0 +1,155 @@
+[
+    {
+        "code": "E11.9",
+        "description": "Type 2 diabetes mellitus without complications",
+        "keywords": [
+            "diabetes",
+            "blood glucose",
+            "sugar",
+            "diabetic",
+            "hyperglycemia"
+        ]
+    },
+    {
+        "code": "I10",
+        "description": "Essential (primary) hypertension",
+        "keywords": [
+            "hypertension",
+            "high blood pressure",
+            "BP high",
+            "elevated BP"
+        ]
+    },
+    {
+        "code": "R07.9",
+        "description": "Chest pain, unspecified",
+        "keywords": [
+            "chest pain",
+            "chest discomfort",
+            "angina",
+            "heart pain"
+        ]
+    },
+    {
+        "code": "J06.9",
+        "description": "Acute upper respiratory infection, unspecified",
+        "keywords": [
+            "cold",
+            "cough",
+            "URI",
+            "upper respiratory",
+            "sore throat",
+            "runny nose"
+        ]
+    },
+    {
+        "code": "M54.5",
+        "description": "Low back pain",
+        "keywords": [
+            "back pain",
+            "lower back",
+            "lumbar pain",
+            "backache"
+        ]
+    },
+    {
+        "code": "K21.0",
+        "description": "Gastroesophageal reflux disease with esophagitis",
+        "keywords": [
+            "GERD",
+            "acid reflux",
+            "heartburn",
+            "acidity",
+            "gastric reflux"
+        ]
+    },
+    {
+        "code": "R51",
+        "description": "Headache",
+        "keywords": [
+            "headache",
+            "head pain",
+            "cephalalgia",
+            "migraine"
+        ]
+    },
+    {
+        "code": "R50.9",
+        "description": "Fever, unspecified",
+        "keywords": [
+            "fever",
+            "pyrexia",
+            "temperature",
+            "febrile"
+        ]
+    },
+    {
+        "code": "N39.0",
+        "description": "Urinary tract infection, site not specified",
+        "keywords": [
+            "UTI",
+            "urinary infection",
+            "burning urination",
+            "dysuria"
+        ]
+    },
+    {
+        "code": "R42",
+        "description": "Dizziness and giddiness",
+        "keywords": [
+            "dizziness",
+            "vertigo",
+            "giddiness",
+            "lightheaded",
+            "chakkar"
+        ]
+    },
+    {
+        "code": "R11.10",
+        "description": "Vomiting, unspecified",
+        "keywords": [
+            "vomiting",
+            "nausea",
+            "emesis",
+            "throwing up"
+        ]
+    },
+    {
+        "code": "K59.00",
+        "description": "Constipation, unspecified",
+        "keywords": [
+            "constipation",
+            "difficulty passing stool",
+            "kabz"
+        ]
+    },
+    {
+        "code": "R05",
+        "description": "Cough",
+        "keywords": [
+            "cough",
+            "coughing",
+            "dry cough",
+            "productive cough"
+        ]
+    },
+    {
+        "code": "R06.02",
+        "description": "Shortness of breath",
+        "keywords": [
+            "dyspnea",
+            "breathlessness",
+            "SOB",
+            "difficulty breathing"
+        ]
+    },
+    {
+        "code": "R00.0",
+        "description": "Tachycardia, unspecified",
+        "keywords": [
+            "palpitations",
+            "rapid heartbeat",
+            "racing heart"
+        ]
+    }
+]
