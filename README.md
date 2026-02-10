@@ -9,12 +9,12 @@
 
 ## 🚀 Features
 
-- **🎙️ Real-time Transcription**: Faster-Whisper ASR with int8 quantization
-- **🧠 Multi-Agent AI Pipeline**: LangGraph workflow with Scribe, Coder, and Auditor agents
-- **🔍 ICD-10 Coding**: ChromaDB-powered RAG for automatic diagnosis coding
-- **📋 SOAP Note Generation**: Structured medical documentation
-- **✅ FHIR/ABDM Compliance**: Ayushman Bharat Digital Mission compatible output
-- **💻 Offline-First**: Runs entirely on local hardware (GTX 1650 optimized)
+- **  Real-time Transcription**: Faster-Whisper ASR with int8 quantization
+- **  Multi-Agent AI Pipeline**: LangGraph workflow with Scribe, Coder, and Auditor agents
+- **  ICD-10 Coding**: ChromaDB-powered RAG for automatic diagnosis coding
+- ** SOAP Note Generation**: Structured medical documentation
+- **  FHIR/ABDM Compliance**: Ayushman Bharat Digital Mission compatible output
+- **  Offline-First**: Runs entirely on local hardware (GTX 1650 optimized)
 
 ## 📁 Project Structure
 
