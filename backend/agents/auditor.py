@@ -62,6 +62,7 @@ def auditor_node(state: AgentState) -> AgentState:
     # Check what we have
     entities = state.get("medical_entities", [])
     icd_codes = state.get("icd_codes", [])
+    procedure_codes = state.get("procedure_codes", [])  # F12
     transcript = state.get("normalized_transcript", state["transcript"])
     raw_transcript = state["transcript"]
 
@@ -78,7 +79,7 @@ SOAP Format:
 - Subjective: Patient's complaints and history
 - Objective: Vital signs, examination findings
 - Assessment: Diagnosis with ICD-10 codes
-- Plan: Treatment, medications, follow-up
+- Plan: Treatment, medications, follow-up, and suggested procedure codes
 
 Respond in JSON matching ABDM FHIR OPConsultRecord structure:
 {
@@ -89,11 +90,17 @@ Respond in JSON matching ABDM FHIR OPConsultRecord structure:
         {"title": "Subjective", "text": "..."},
         {"title": "Objective", "text": "..."},
         {"title": "Assessment", "text": "...", "codes": [...]},
-        {"title": "Plan", "text": "..."}
+        {"title": "Plan", "text": "...", "procedure_codes": [...]}
     ]
-}"""
+}
+
+Note: procedure_codes in Plan should be suggestions only, always marked "suggested — verify"."""
 
     code_str = ", ".join([f"{c.get('code', 'N/A')}" for c in icd_codes])
+    proc_str = ", ".join([
+        f"{p.get('code', 'N/A')}: {p.get('description', '')} (suggested — verify)"
+        for p in procedure_codes[:5]
+    ]) if procedure_codes else "None identified"
 
     messages = [
         SystemMessage(content=system_prompt),
@@ -105,7 +112,9 @@ Medical Entities: {json.dumps(entities)}
 
 ICD-10 Codes: {code_str}
 
-Generate a compliant SOAP note.
+Suggested Procedure/Billing Codes: {proc_str}
+
+Generate a compliant SOAP note. Include procedure_codes in the Plan section if applicable.
 """
         ),
     ]
@@ -118,6 +127,11 @@ Generate a compliant SOAP note.
         for section in soap_note.get("section", []):
             if section.get("title") == "Assessment":
                 section["codes"] = icd_codes
+
+        # F12: Add procedure codes to plan section
+        for section in soap_note.get("section", []):
+            if section.get("title") == "Plan":
+                section["procedure_codes"] = procedure_codes
 
         # F1: Tag each section with provenance
         provenance_tags = []
@@ -238,7 +252,7 @@ Generate a compliant SOAP note.
                 {"title": "Subjective", "text": subjective_text},
                 {"title": "Objective", "text": objective_text},
                 {"title": "Assessment", "text": assessment_text, "codes": icd_codes},
-                {"title": "Plan", "text": plan_text},
+                {"title": "Plan", "text": plan_text, "procedure_codes": procedure_codes},
             ],
         }
 

@@ -1,6 +1,7 @@
 """A.R.I.A. Coder Agent.
 
 Queries ChromaDB for ICD-10 codes based on medical entities.
+Suggests billing/procedure codes based on encounter (F12).
 Extracted from agent_graph.py into its own module.
 """
 
@@ -14,6 +15,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from state import AgentState
 from llm import get_llm
 from services.icd_retriever import ICD10Retriever
+from services.procedure_suggester import get_procedure_suggester
 from provenance import tag_code, RETRIEVED
 
 logger = logging.getLogger(__name__)
@@ -89,11 +91,23 @@ Respond in JSON format:
             tagged_codes.append(updated)
             provenance_tags.append(tag)
 
+        # F12: Suggest procedure/billing codes
+        suggester = get_procedure_suggester()
+        procedure_suggestions = suggester.suggest(
+            entities=entities,
+            transcript=transcript,
+            n_results=5,
+        )
+
         return {
             **state,
             "icd_codes": tagged_codes,
+            "procedure_codes": procedure_suggestions,
             "provenance_tags": provenance_tags,
-            "agent_thoughts": [f"Coder: Assigned {len(tagged_codes)} ICD-10 codes (all retrieved)"],
+            "agent_thoughts": [
+                f"Coder: Assigned {len(tagged_codes)} ICD-10 codes (all retrieved)",
+                f"Coder: Suggested {len(procedure_suggestions)} procedure codes (verify with physician)",
+            ],
             "current_agent": "coder",
         }
     except Exception as e:
@@ -106,12 +120,22 @@ Respond in JSON format:
             tagged_codes.append(updated)
             provenance_tags.append(tag)
 
+        # F12: Still suggest procedures in fallback
+        suggester = get_procedure_suggester()
+        procedure_suggestions = suggester.suggest(
+            entities=entities,
+            transcript=transcript,
+            n_results=5,
+        )
+
         return {
             **state,
             "icd_codes": tagged_codes,
+            "procedure_codes": procedure_suggestions,
             "provenance_tags": provenance_tags,
             "agent_thoughts": [
-                f"Coder: Retrieved {len(tagged_codes)} codes from RAG (LLM unavailable)"
+                f"Coder: Retrieved {len(tagged_codes)} codes from RAG (LLM unavailable)",
+                f"Coder: Suggested {len(procedure_suggestions)} procedure codes",
             ],
             "current_agent": "coder",
         }

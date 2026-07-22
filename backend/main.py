@@ -19,6 +19,7 @@ from pydantic import BaseModel
 from services.transcriber import get_transcriber, TranscriptSegment
 from services.vocab_corrector import get_corrector
 from services.drug_corrector import get_drug_corrector
+from services.procedure_suggester import get_procedure_suggester
 from agent_graph import process_transcript_streaming, process_transcript
 
 # =============================================================================
@@ -293,6 +294,7 @@ async def process_text(request: TranscriptRequest):
             "success": True,
             "soap_note": result.get("soap_note", {}),
             "icd_codes": result.get("icd_codes", []),
+            "procedure_codes": result.get("procedure_codes", []),
             "fhir_compliant": result.get("fhir_compliant", False),
             "missing_fields": result.get("missing_info_flags", [])
         })
@@ -403,10 +405,74 @@ async def eval_history():
                 except Exception as e:
                     logger.error(f"Failed to load {result_file}: {e}")
 
-        return JSONResponse({
-            "success": True,
-            "history": results[:50]  # Last 50 runs
-        })
+    return JSONResponse({
+        "success": True,
+        **result,
+    })
+
+
+# =============================================================================
+# Procedure/Billing Code Suggestion (F12)
+# =============================================================================
+
+@app.get("/api/procedures")
+async def get_procedures():
+    """Get procedure code database info (categories and counts)."""
+    suggester = get_procedure_suggester()
+    return JSONResponse({
+        "success": True,
+        "total_codes": len(suggester.get_all_codes()),
+        "categories": suggester.list_categories(),
+        "category_counts": {
+            cat: len(suggester.search_by_category(cat))
+            for cat in suggester.list_categories()
+        },
+    })
+
+
+@app.get("/api/procedures/search")
+async def search_procedures(q: str):
+    """Search procedure codes by keyword."""
+    suggester = get_procedure_suggester()
+    results = []
+    query_lower = q.lower()
+    for proc in suggester.get_all_codes():
+        keywords = [kw.lower() for kw in proc.get("keywords", [])]
+        desc = proc.get("description", "").lower()
+        if any(kw in query_lower or query_lower in kw for kw in keywords) or query_lower in desc:
+            results.append(proc)
+    return JSONResponse({
+        "success": True,
+        "query": q,
+        "results": results,
+    })
+
+
+@app.get("/api/procedures/{category}")
+async def get_procedures_by_category(category: str):
+    """Get procedure codes in a specific category."""
+    suggester = get_procedure_suggester()
+    codes = suggester.search_by_category(category)
+    return JSONResponse({
+        "success": True,
+        "category": category,
+        "codes": codes,
+    })
+
+
+@app.post("/api/procedures/suggest")
+async def suggest_procedures(request: TranscriptRequest):
+    """Suggest procedure codes for a given transcript."""
+    suggester = get_procedure_suggester()
+    results = suggester.suggest(
+        entities=[],
+        transcript=request.text,
+        n_results=5,
+    )
+    return JSONResponse({
+        "success": True,
+        "suggestions": results,
+    })
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

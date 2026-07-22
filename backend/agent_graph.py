@@ -73,6 +73,7 @@ def process_transcript(transcript: str) -> AgentState:
         "normalized_transcript": "",
         "medical_entities": [],
         "icd_codes": [],
+        "procedure_codes": [],
         "missing_info_flags": [],
         "fhir_compliant": False,
         "soap_note": {},
@@ -94,7 +95,7 @@ async def process_transcript_streaming(transcript: str):
     """Process transcript with streaming updates for real-time UI.
 
     Yields:
-        dict: {"type": "thought"|"soap"|"codes"|"provenance"|"validation"|"complete", "data": ...}
+        dict: {"type": "thought"|"soap"|"codes"|"procedures"|"provenance"|"validation"|"complete", "data": ...}
     """
     graph = create_graph()
 
@@ -103,6 +104,7 @@ async def process_transcript_streaming(transcript: str):
         "normalized_transcript": "",
         "medical_entities": [],
         "icd_codes": [],
+        "procedure_codes": [],
         "missing_info_flags": [],
         "fhir_compliant": False,
         "soap_note": {},
@@ -125,6 +127,10 @@ async def process_transcript_streaming(transcript: str):
 
                 if "icd_codes" in node_output:
                     yield {"type": "codes", "data": node_output["icd_codes"]}
+
+                # F12: Stream procedure codes
+                if "procedure_codes" in node_output and node_output["procedure_codes"]:
+                    yield {"type": "procedures", "data": node_output["procedure_codes"]}
 
                 # F1: Stream provenance tags
                 if "provenance_tags" in node_output and node_output["provenance_tags"]:

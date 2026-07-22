@@ -23,6 +23,7 @@ class AgentState(TypedDict):
 
     # Coder Agent Output
     icd_codes: list[dict]
+    procedure_codes: list[dict]  # F12: suggested billing/procedure codes
 
     # Auditor Agent Output
     missing_info_flags: list[str]
