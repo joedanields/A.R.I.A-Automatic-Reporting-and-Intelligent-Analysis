@@ -24,6 +24,8 @@ from services.record_store import get_record_store
 from services.patient_context import load_patient_context, get_patient_history_list
 from services.learning_store import get_learning_store
 from services.patient_summary import generate_patient_summary, get_supported_languages
+from services.auth import get_auth_service
+from services.audit import get_audit_log
 from agent_graph import process_transcript_streaming, process_transcript
 
 # =============================================================================
@@ -750,7 +752,187 @@ async def generate_summary(request: SummaryRequest):
     except Exception as e:
         logger.error(f"Summary generation error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-async def get_vocab():
+
+
+# =============================================================================
+# Authentication (F18)
+# =============================================================================
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+
+class CreateUserRequest(BaseModel):
+    username: str
+    password: str
+    role: str = "doctor"
+    display_name: str = ""
+
+
+@app.post("/api/auth/login")
+async def login(request: LoginRequest):
+    """Authenticate a user and return a token."""
+    try:
+        auth = get_auth_service()
+        result = auth.authenticate(request.username, request.password)
+        if not result:
+            audit = get_audit_log()
+            audit.log(
+                action="login",
+                username=request.username,
+                outcome="failure",
+                details="Invalid credentials",
+            )
+            raise HTTPException(status_code=401, detail="Invalid credentials")
+
+        audit = get_audit_log()
+        audit.log(
+            action="login",
+            user_id=result["user"]["id"],
+            username=result["user"]["username"],
+            outcome="success",
+        )
+        return JSONResponse({"success": True, **result})
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Login error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/auth/me")
+async def get_current_user(authorization: str | None = None):
+    """Get current user from token (header or query param)."""
+    try:
+        token = None
+        if authorization:
+            token = authorization.replace("Bearer ", "")
+
+        if not token:
+            raise HTTPException(status_code=401, detail="No token provided")
+
+        auth = get_auth_service()
+        user = auth.verify_token(token)
+        if not user:
+            raise HTTPException(status_code=401, detail="Invalid or expired token")
+
+        return JSONResponse({"success": True, "user": user})
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Auth check error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/auth/users")
+async def create_user(request: CreateUserRequest):
+    """Create a new user (admin only)."""
+    try:
+        auth = get_auth_service()
+        user = auth.create_user(
+            username=request.username,
+            password=request.password,
+            role=request.role,
+            display_name=request.display_name,
+        )
+        audit = get_audit_log()
+        audit.log(
+            action="create_user",
+            resource_type="user",
+            resource_id=user["id"],
+            details=f"Created user {request.username} (role={request.role})",
+        )
+        return JSONResponse({"success": True, "user": user})
+    except ValueError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    except Exception as e:
+        logger.error(f"User creation error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/auth/users")
+async def list_users():
+    """List all active users."""
+    try:
+        auth = get_auth_service()
+        users = auth.list_users()
+        return JSONResponse({"success": True, "users": users})
+    except Exception as e:
+        logger.error(f"User list error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete("/api/auth/users/{user_id}")
+async def deactivate_user(user_id: str):
+    """Deactivate a user (admin only)."""
+    try:
+        auth = get_auth_service()
+        deleted = auth.deactivate_user(user_id)
+        if not deleted:
+            raise HTTPException(status_code=404, detail="User not found")
+        audit = get_audit_log()
+        audit.log(
+            action="deactivate_user",
+            resource_type="user",
+            resource_id=user_id,
+        )
+        return JSONResponse({"success": True, "message": f"User {user_id[:8]}... deactivated"})
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"User deactivation error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# =============================================================================
+# Audit Log (F18)
+# =============================================================================
+
+@app.get("/api/audit")
+async def query_audit_log(
+    user_id: str | None = None,
+    action: str | None = None,
+    resource_type: str | None = None,
+    limit: int = 100,
+):
+    """Query audit log entries."""
+    try:
+        audit = get_audit_log()
+        entries = audit.query(
+            user_id=user_id,
+            action=action,
+            resource_type=resource_type,
+            limit=limit,
+        )
+        return JSONResponse({
+            "success": True,
+            "total": audit.count(),
+            "entries": entries,
+        })
+    except Exception as e:
+        logger.error(f"Audit query error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/audit/verify")
+async def verify_audit_chain():
+    """Verify the integrity of the audit chain."""
+    try:
+        audit = get_audit_log()
+        is_valid, entries_checked = audit.verify_chain()
+        return JSONResponse({
+            "success": True,
+            "chain_valid": is_valid,
+            "entries_checked": entries_checked,
+            "total_entries": audit.count(),
+        })
+    except Exception as e:
+        logger.error(f"Audit verification error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/vocab")
     """Get current clinic vocabulary (hotwords and corrections)."""
     try:
         corrector = get_corrector()
