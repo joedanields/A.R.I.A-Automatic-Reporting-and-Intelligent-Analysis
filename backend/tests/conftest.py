@@ -31,43 +31,50 @@ def tmp_chroma_dir(tmp_path: Path) -> Path:
 
 @pytest.fixture()
 def fresh_retriever(tmp_chroma_dir: Path) -> Generator[object, None, None]:
-    """Create a fresh ICD10Retriever with a temporary ChromaDB, resetting the singleton.
+    """Create a fresh CodeRetriever with a temporary ChromaDB, resetting the singleton.
 
     Yields the retriever instance.  After the test the singleton is cleared so
     subsequent tests get a clean slate.
     """
     import chromadb
 
-    # Import the current location — will change after extraction, but the
-    # characterization test pins the *behaviour*, not the import path.
-    from agent_graph import ICD10Retriever
+    from services.icd_retriever import CodeRetriever, MedicalEmbeddingFunction
 
     # Reset singleton
-    ICD10Retriever._instance = None  # type: ignore[attr-defined]
+    CodeRetriever._instance = None  # type: ignore[attr-defined]
 
-    # Monkey-patch PersistentClient to use temp dir
-    _orig_init = ICD10Retriever.__init__
+    # Reset embedding model cache
+    MedicalEmbeddingFunction._model = None
 
-    def _patched_init(self: object) -> None:  # type: ignore[no-untyped-def]
-        self.__class__._instance = self  # type: ignore[attr-defined]
-        self._initialized = False  # type: ignore[attr-defined]
-        self.client = chromadb.PersistentClient(path=str(tmp_chroma_dir))  # type: ignore[attr-defined]
-        self.collection = self.client.get_or_create_collection(  # type: ignore[attr-defined]
-            name="icd10_codes",
-            metadata={"description": "ICD-10 medical codes for diagnosis"},
+    instance = CodeRetriever.__new__(CodeRetriever)
+    instance._initialized = False
+    instance.client = chromadb.PersistentClient(path=str(tmp_chroma_dir))
+    instance._embedding_fn = MedicalEmbeddingFunction()
+
+    # Create collections for each system
+    instance.collections = {}
+    for system in ["ICD-10", "ICD-11"]:
+        collection_name = system.lower().replace("-", "").replace(" ", "") + "_codes"
+        collection = instance.client.get_or_create_collection(
+            name=collection_name,
+            metadata={"description": f"{system} medical codes for diagnosis", "system": system},
+            embedding_function=instance._embedding_fn,
         )
-        if self.collection.count() == 0:
-            self._populate_collection()  # type: ignore[attr-defined]
-        self._initialized = True  # type: ignore[attr-defined]
+        instance.collections[system] = collection
 
-    ICD10Retriever.__init__ = _patched_init  # type: ignore[assignment]
+    # Populate if empty
+    for system, collection in instance.collections.items():
+        if collection.count() == 0:
+            instance._populate_collection(system, collection)
 
-    instance = ICD10Retriever()
+    instance._initialized = True
+    CodeRetriever._instance = instance  # type: ignore[attr-defined]
+
     yield instance
 
-    # Restore and reset
-    ICD10Retriever.__init__ = _orig_init  # type: ignore[assignment]
-    ICD10Retriever._instance = None  # type: ignore[attr-defined]
+    # Reset
+    CodeRetriever._instance = None  # type: ignore[attr-defined]
+    MedicalEmbeddingFunction._model = None
 
 
 # ---------------------------------------------------------------------------

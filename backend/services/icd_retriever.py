@@ -1,16 +1,15 @@
-"""A.R.I.A. ICD-10 RAG retriever.
+"""A.R.I.A. Medical Code RAG Retriever.
 
-ChromaDB-backed retriever for ICD-10 diagnosis codes.  Extracted from
-agent_graph.py into its own module so F9 can rewrite the internals
-(embedder swap, full code DB) behind a stable interface.
+ChromaDB-backed retriever for diagnosis codes (ICD-10, ICD-11, SNOMED CT).
+Extracted from agent_graph.py into its own module.
 
-Public interface (preserved from original):
-  - ICD10Retriever singleton class
-  - get_icd_retriever() accessor
-  - .search(query, n_results=3) -> list[dict]
+Public interface:
+  - CodeRetriever singleton class (renamed from ICD10Retriever)
+  - get_icd_retriever() accessor (backward-compatible)
+  - .search(query, n_results=3, system=None) -> list[dict]
 
 F9: Uses sentence-transformers with a medical embedding model (CPU).
-    Embedding model runs on CPU to preserve GPU VRAM for Whisper/LLM.
+F11: Multi-system support (ICD-10, ICD-11, SNOMED CT).
 """
 
 from __future__ import annotations
@@ -21,7 +20,7 @@ from typing import Optional
 import chromadb
 from chromadb.api.types import EmbeddingFunction, Documents, Embeddings
 
-from data_loader import load_icd10_codes
+from data_loader import load_icd10_codes, load_icd11_codes
 
 logger = logging.getLogger(__name__)
 
@@ -67,12 +66,16 @@ class MedicalEmbeddingFunction(EmbeddingFunction):
         return embeddings.tolist()
 
 
-class ICD10Retriever:
-    """RAG retriever for ICD-10 codes using ChromaDB with medical embeddings."""
+class CodeRetriever:
+    """RAG retriever for medical diagnosis codes using ChromaDB.
 
-    _instance: Optional["ICD10Retriever"] = None
+    Supports multiple coding systems: ICD-10, ICD-11, SNOMED CT.
+    Uses sentence-transformers medical embedding model (CPU).
+    """
 
-    def __new__(cls) -> "ICD10Retriever":
+    _instance: Optional["CodeRetriever"] = None
+
+    def __new__(cls) -> "CodeRetriever":
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             cls._instance._initialized = False
@@ -88,59 +91,53 @@ class ICD10Retriever:
         # F9: Use medical embedding function
         self._embedding_fn = MedicalEmbeddingFunction()
 
-        self.collection = self._get_or_create_collection()
-
-        # F9: If collection was created with a different embedder, rebuild
-        expected_count = len(load_icd10_codes())
-        current_count = self.collection.count()
-        if current_count > 0 and current_count != expected_count:
-            logger.info(
-                f"Re-indexing: collection has {current_count} codes, "
-                f"expected {expected_count}. Deleting and rebuilding."
-            )
-            self.client.delete_collection("icd10_codes")
-            self.collection = self._get_or_create_collection()
+        # Create collections for each coding system
+        self.collections: dict[str, any] = {}
+        for system in ["ICD-10", "ICD-11"]:
+            self.collections[system] = self._get_or_create_collection(system)
 
         # Populate if empty
-        if self.collection.count() == 0:
-            self._populate_collection()
+        for system, collection in self.collections.items():
+            if collection.count() == 0:
+                self._populate_collection(system, collection)
 
         self._initialized = True
 
-    def _get_or_create_collection(self):
-        """Get or create the ICD-10 collection, handling embedder conflicts.
+    def _get_or_create_collection(self, system: str):
+        """Get or create a collection for a coding system, handling embedder conflicts."""
+        collection_name = system.lower().replace("-", "").replace(" ", "") + "_codes"
+        description = f"{system} medical codes for diagnosis"
 
-        If the persisted collection was created with a different embedding
-        function, ChromaDB raises ValueError.  We catch it, delete the
-        stale collection, and create a fresh one with our MedicalEmbeddingFunction.
-        """
         try:
             return self.client.get_or_create_collection(
-                name="icd10_codes",
-                metadata={"description": "ICD-10 medical codes for diagnosis"},
+                name=collection_name,
+                metadata={"description": description, "system": system},
                 embedding_function=self._embedding_fn,
             )
         except ValueError:
-            # Embedding function conflict — stale collection from old embedder
-            logger.info(
-                "Embedding function conflict detected. "
-                "Deleting stale collection and recreating with medical embeddings."
-            )
+            logger.info(f"Embedding function conflict for {system}. Recreating collection.")
             try:
-                self.client.delete_collection("icd10_codes")
+                self.client.delete_collection(collection_name)
             except Exception:
                 pass
             return self.client.get_or_create_collection(
-                name="icd10_codes",
-                metadata={"description": "ICD-10 medical codes for diagnosis"},
+                name=collection_name,
+                metadata={"description": description, "system": system},
                 embedding_function=self._embedding_fn,
             )
 
-    def _populate_collection(self) -> None:
-        """Populate ChromaDB with ICD-10 codes from the full dataset."""
-        codes = load_icd10_codes()
+    def _populate_collection(self, system: str, collection) -> None:
+        """Populate ChromaDB with codes from the specified system."""
+        if system == "ICD-10":
+            codes = load_icd10_codes()
+        elif system == "ICD-11":
+            codes = load_icd11_codes()
+        else:
+            logger.warning(f"Unknown coding system: {system}")
+            return
+
         if not codes:
-            logger.warning("No ICD-10 codes found to populate")
+            logger.warning(f"No {system} codes found to populate")
             return
 
         documents: list[str] = []
@@ -148,48 +145,83 @@ class ICD10Retriever:
         ids: list[str] = []
 
         for code_data in codes:
-            # Create searchable document from description and keywords
             doc = f"{code_data['description']}. Keywords: {', '.join(code_data.get('keywords', []))}"
             documents.append(doc)
             metadatas.append({
                 "code": code_data["code"],
                 "description": code_data["description"],
+                "system": system,
             })
-            ids.append(code_data["code"])
+            # Prefix ID with system to avoid collisions
+            ids.append(f"{system}:{code_data['code']}")
 
-        # Add in batches to avoid memory issues
         batch_size = 50
         for i in range(0, len(documents), batch_size):
             batch_docs = documents[i:i + batch_size]
             batch_metas = metadatas[i:i + batch_size]
             batch_ids = ids[i:i + batch_size]
-            self.collection.add(
+            collection.add(
                 documents=batch_docs,
                 metadatas=batch_metas,
                 ids=batch_ids,
             )
 
-        logger.info(f"Populated ChromaDB with {len(codes)} ICD-10 codes (medical embeddings)")
+        logger.info(f"Populated ChromaDB with {len(codes)} {system} codes")
 
-    def search(self, query: str, n_results: int = 3) -> list[dict]:
-        """Search for relevant ICD-10 codes using medical embeddings."""
-        results = self.collection.query(
-            query_texts=[query],
-            n_results=n_results,
-        )
+    def search(self, query: str, n_results: int = 3, system: str | None = None) -> list[dict]:
+        """Search for relevant codes using medical embeddings.
 
-        codes: list[dict] = []
-        if results["metadatas"] and results["metadatas"][0]:
-            for i, metadata in enumerate(results["metadatas"][0]):
-                codes.append({
-                    "code": metadata["code"],
-                    "description": metadata["description"],
-                    "relevance": results["distances"][0][i] if results["distances"] else 0,
-                })
+        Args:
+            query: Search query
+            n_results: Number of results to return
+            system: Optional filter by coding system ('ICD-10', 'ICD-11')
 
-        return codes
+        Returns:
+            List of code dictionaries with code, description, system, relevance
+        """
+        all_results = []
+
+        systems_to_search = [system] if system else ["ICD-10", "ICD-11"]
+
+        for sys in systems_to_search:
+            collection = self.collections.get(sys)
+            if collection is None:
+                continue
+
+            results = collection.query(
+                query_texts=[query],
+                n_results=n_results,
+            )
+
+            if results["metadatas"] and results["metadatas"][0]:
+                for i, metadata in enumerate(results["metadatas"][0]):
+                    all_results.append({
+                        "code": metadata["code"],
+                        "description": metadata["description"],
+                        "system": metadata.get("system", sys),
+                        "relevance": results["distances"][0][i] if results["distances"] else 0,
+                    })
+
+        # Sort by relevance and return top N
+        all_results.sort(key=lambda x: x["relevance"])
+        return all_results[:n_results]
+
+    def get_systems(self) -> list[str]:
+        """List supported coding systems."""
+        return list(self.collections.keys())
+
+    def get_code_count(self, system: str | None = None) -> int:
+        """Get total number of indexed codes."""
+        if system:
+            collection = self.collections.get(system)
+            return collection.count() if collection else 0
+        return sum(c.count() for c in self.collections.values())
 
 
-def get_icd_retriever() -> ICD10Retriever:
-    """Get or create the global ICD-10 retriever singleton."""
-    return ICD10Retriever()
+# Backward-compatible alias
+ICD10Retriever = CodeRetriever
+
+
+def get_icd_retriever() -> CodeRetriever:
+    """Get or create the global code retriever singleton."""
+    return CodeRetriever()

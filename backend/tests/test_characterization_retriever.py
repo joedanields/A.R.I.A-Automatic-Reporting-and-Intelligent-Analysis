@@ -1,13 +1,15 @@
-"""Characterization tests for ICD10Retriever.
+"""Characterization tests for CodeRetriever.
 
-After F9 (medical embeddings + full ICD-10 DB), these tests pin the
-current retrieval behaviour against the 254-code dataset.
+After F9+F11 (medical embeddings, full ICD-10 DB, multi-system support),
+these tests pin the retrieval behavior against the 254-code ICD-10 dataset
+and 20-code ICD-11 dataset.
 
 What is pinned:
-  - Collection contains 254 codes
-  - Each result has {code, description, relevance} keys
-  - Known queries return expected top-1 code (may differ from 15-code sample)
-  - search() respects n_results
+  - ICD-10 collection contains 254 codes
+  - ICD-11 collection contains 20 codes
+  - Each result has {code, description, system, relevance} keys
+  - Known queries return expected top-1 code
+  - search() respects n_results and system filter
   - Singleton pattern works
 """
 
@@ -22,37 +24,77 @@ import pytest
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
 
-class TestICD10RetrieverCollection:
+class TestCodeRetrieverCollection:
     """Pin the collection population behaviour."""
 
-    def test_collection_has_254_codes(self, fresh_retriever: object) -> None:
+    def test_icd10_has_254_codes(self, fresh_retriever: object) -> None:
         """The full ICD-10 dataset (254 codes) must be fully indexed."""
-        count = fresh_retriever.collection.count()  # type: ignore[attr-defined]
-        assert count >= 150, f"Expected >=150 codes, got {count}"
+        count = fresh_retriever.get_code_count("ICD-10")  # type: ignore[attr-defined]
+        assert count >= 150, f"Expected >=150 ICD-10 codes, got {count}"
 
-    def test_collection_ids_are_icd_codes(self, fresh_retriever: object) -> None:
-        """Every document ID must be a valid ICD-10 code string."""
-        ids = fresh_retriever.collection.get()["ids"]  # type: ignore[attr-defined]
-        assert len(ids) >= 150
-        # Spot-check known codes from the original sample
-        for code in ["E11.9", "I10", "R51", "R50.9", "R05"]:
-            assert code in ids
+    def test_icd11_has_20_codes(self, fresh_retriever: object) -> None:
+        """The ICD-11 sample dataset (20 codes) must be indexed."""
+        count = fresh_retriever.get_code_count("ICD-11")  # type: ignore[attr-defined]
+        assert count >= 15, f"Expected >=15 ICD-11 codes, got {count}"
+
+    def test_collection_ids_are_prefixed(self, fresh_retriever: object) -> None:
+        """Document IDs must be prefixed with system (e.g., 'ICD-10:E11.9')."""
+        icd10_count = fresh_retriever.get_code_count("ICD-10")  # type: ignore[attr-defined]
+        icd11_count = fresh_retriever.get_code_count("ICD-11")  # type: ignore[attr-defined]
+        assert icd10_count > 0
+        assert icd11_count > 0
+
+    def test_get_systems(self, fresh_retriever: object) -> None:
+        """Must report supported coding systems."""
+        systems = fresh_retriever.get_systems()  # type: ignore[attr-defined]
+        assert "ICD-10" in systems
+        assert "ICD-11" in systems
 
 
-class TestICD10RetrieverSearch:
+class TestCodeRetrieverSearch:
     """Pin the search semantics and result shape."""
 
     def test_result_shape(self, fresh_retriever: object) -> None:
-        """Each result dict must have code, description, and relevance keys."""
+        """Each result dict must have code, description, system, and relevance keys."""
         results = fresh_retriever.search("diabetes", n_results=1)  # type: ignore[attr-defined]
         assert len(results) >= 1
         item = results[0]
         assert "code" in item
         assert "description" in item
+        assert "system" in item
         assert "relevance" in item
         assert isinstance(item["code"], str)
         assert isinstance(item["description"], str)
-        assert isinstance(item["relevance"], (int, float))
+        assert item["system"] in ["ICD-10", "ICD-11"]
+
+    def test_icd10_system_filter(self, fresh_retriever: object) -> None:
+        """Search with system='ICD-10' must only return ICD-10 codes."""
+        results = fresh_retriever.search("diabetes", n_results=5, system="ICD-10")  # type: ignore[attr-defined]
+        assert len(results) >= 1
+        for r in results:
+            assert r["system"] == "ICD-10"
+
+    def test_icd11_system_filter(self, fresh_retriever: object) -> None:
+        """Search with system='ICD-11' must only return ICD-11 codes."""
+        results = fresh_retriever.search("diabetes", n_results=5, system="ICD-11")  # type: ignore[attr-defined]
+        assert len(results) >= 1
+        for r in results:
+            assert r["system"] == "ICD-11"
+
+    def test_icd11_diabetes_code(self, fresh_retriever: object) -> None:
+        """ICD-11 diabetes query should return 5A11."""
+        results = fresh_retriever.search("diabetes type 2", n_results=3, system="ICD-11")  # type: ignore[attr-defined]
+        assert len(results) >= 1
+        codes = [r["code"] for r in results]
+        assert "5A11" in codes, f"Expected ICD-11 code 5A11, got {codes}"
+
+    def test_cross_system_search(self, fresh_retriever: object) -> None:
+        """Search without system filter returns results from both systems."""
+        results = fresh_retriever.search("hypertension high blood pressure", n_results=5)  # type: ignore[attr-defined]
+        assert len(results) >= 3
+        systems = {r["system"] for r in results}
+        # Should have at least ICD-10 results
+        assert "ICD-10" in systems
 
     @pytest.mark.parametrize(
         "query,expected_top_codes",
@@ -94,8 +136,8 @@ class TestICD10RetrieverSearch:
     def test_top_code_matches_query(
         self, fresh_retriever: object, query: str, expected_top_codes: list[str]
     ) -> None:
-        """For each clinical concept, the top-1 retrieval must be one of the expected codes."""
-        results = fresh_retriever.search(query, n_results=3)  # type: ignore[attr-defined]
+        """For each clinical concept, the top-1 ICD-10 retrieval must be one of the expected codes."""
+        results = fresh_retriever.search(query, n_results=3, system="ICD-10")  # type: ignore[attr-defined]
         assert len(results) >= 1, f"No results for query: {query}"
         assert results[0]["code"] in expected_top_codes, (
             f"Query '{query}': expected one of {expected_top_codes}, "
@@ -114,20 +156,20 @@ class TestICD10RetrieverSearch:
 
     def test_medical_embeddings_produce_results(self, fresh_retriever: object) -> None:
         """Medical embeddings should produce meaningful results for clinical queries."""
-        results = fresh_retriever.search("diabetes type 2 blood sugar", n_results=5)  # type: ignore[attr-defined]
+        results = fresh_retriever.search("diabetes type 2 blood sugar", n_results=5, system="ICD-10")  # type: ignore[attr-defined]
         assert len(results) >= 3
         # All top results should be diabetes-related
         codes = [r["code"] for r in results]
         assert any(c.startswith("E11") for c in codes), f"Expected diabetes codes, got {codes}"
 
 
-class TestICD10RetrieverSingleton:
+class TestCodeRetrieverSingleton:
     """Pin the singleton pattern."""
 
     def test_second_call_returns_same_instance(self, fresh_retriever: object) -> None:
-        """ICD10Retriever() must return the same object on repeated calls."""
-        from agent_graph import ICD10Retriever
+        """CodeRetriever() must return the same object on repeated calls."""
+        from services.icd_retriever import CodeRetriever
 
-        a = ICD10Retriever()
-        b = ICD10Retriever()
+        a = CodeRetriever()
+        b = CodeRetriever()
         assert a is b

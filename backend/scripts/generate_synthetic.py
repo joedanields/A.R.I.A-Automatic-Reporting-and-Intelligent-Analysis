@@ -76,7 +76,7 @@ CONSULTATION_TEMPLATES = [
                 "When should I come back?",
             ],
             "plan": [
-                "Continue {med1} for now. Come back in three months.",
+                "Continue your current diabetes medication. Come back in three months.",
                 "Let's increase the dose slightly. Follow up in two months.",
                 "Everything looks good. Continue the same regimen and check again in three months.",
             ],

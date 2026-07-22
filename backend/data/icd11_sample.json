@@ -1,0 +1,22 @@
+[
+  {"code": "5A11", "description": "Type 2 diabetes mellitus", "system": "ICD-11", "keywords": ["diabetes", "type 2", "blood sugar", "glucose"]},
+  {"code": "BA01", "description": "Essential hypertension", "system": "ICD-11", "keywords": ["hypertension", "high blood pressure", "BP"]},
+  {"code": "8A80", "description": "Migraine", "system": "ICD-11", "keywords": ["migraine", "headache", "throbbing"]},
+  {"code": "MD91", "description": "Low back pain", "system": "ICD-11", "keywords": ["back pain", "lumbago", "lower back"]},
+  {"code": "CA01", "description": "Acute upper respiratory infection", "system": "ICD-11", "keywords": ["cold", "URI", "respiratory", "runny nose"]},
+  {"code": "ED41", "description": "Gastro-oesophageal reflux disease", "system": "ICD-11", "keywords": ["GERD", "acid reflux", "heartburn"]},
+  {"code": "RA01", "description": "Cough", "system": "ICD-11", "keywords": ["cough", "dry cough", "persistent cough"]},
+  {"code": "AA80", "description": "Dizziness", "system": "ICD-11", "keywords": ["dizziness", "vertigo", "lightheaded"]},
+  {"code": "MC11", "description": "Gout", "system": "ICD-11", "keywords": ["gout", "uric acid", "joint pain"]},
+  {"code": "FB31", "description": "Otitis media", "system": "ICD-11", "keywords": ["ear infection", "middle ear", "ear pain"]},
+  {"code": "1C61", "description": "Urinary tract infection", "system": "ICD-11", "keywords": ["UTI", "urinary", "bladder infection"]},
+  {"code": "8D11", "description": "Posterior cervical spine syndrome", "system": "ICD-11", "keywords": ["neck pain", "cervical", "stiff neck"]},
+  {"code": "ME84", "description": "Obesity", "system": "ICD-11", "keywords": ["obesity", "overweight", "BMI"]},
+  {"code": "5A00", "description": "Hypothyroidism", "system": "ICD-11", "keywords": ["hypothyroid", "thyroid", "underactive thyroid"]},
+  {"code": "5C81", "description": "Anaemia", "system": "ICD-11", "keywords": ["anemia", "anaemia", "low hemoglobin"]},
+  {"code": "5B55", "description": "Viral hepatitis B", "system": "ICD-11", "keywords": ["hepatitis B", "liver infection"]},
+  {"code": "6A60", "description": "Major depressive disorder", "system": "ICD-11", "keywords": ["depression", "major depressive", "MDD"]},
+  {"code": "6B00", "description": "Generalised anxiety disorder", "system": "ICD-11", "keywords": ["anxiety", "GAD", "generalized anxiety"]},
+  {"code": "CA22", "description": "Chronic rhinitis", "system": "ICD-11", "keywords": ["rhinitis", "nasal congestion", "stuffy nose"]},
+  {"code": "7B61", "description": "Insomnia", "system": "ICD-11", "keywords": ["insomnia", "sleep disorder", "difficulty sleeping"]}
+]
