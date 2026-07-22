@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect } from "react";
+import type { SourceSpan } from "@/types/shared";
 
 interface TranscriptSegment {
     text: string;
@@ -14,6 +15,7 @@ interface TranscriptSegment {
 interface LiveTranscriptProps {
     segments: TranscriptSegment[];
     isRecording: boolean;
+    highlightSpan?: SourceSpan | null;
 }
 
 // Medical terms to highlight
@@ -48,7 +50,10 @@ const MEDICAL_TERMS = new Set([
     "vomiting",
 ]);
 
-function highlightMedicalTerms(text: string): React.ReactNode[] {
+function highlightMedicalTerms(
+    text: string,
+    highlightSpan?: SourceSpan | null
+): React.ReactNode[] {
     const lowerText = text.toLowerCase();
     const nodes: React.ReactNode[] = [];
     let lastIndex = 0;
@@ -75,9 +80,18 @@ function highlightMedicalTerms(text: string): React.ReactNode[] {
         // Skip overlapping matches
         if (start < lastIndex) return;
 
-        // Add text before this match
+        // Add text before this match (with possible source span highlight)
         if (start > lastIndex) {
-            nodes.push(text.slice(lastIndex, start));
+            const before = text.slice(lastIndex, start);
+            if (highlightSpan && highlightSpan.start_char >= lastIndex && highlightSpan.end_char <= start) {
+                nodes.push(
+                    <span key={`hl-${i}`} className="bg-yellow-500/30 text-yellow-300 px-0.5 rounded">
+                        {before}
+                    </span>
+                );
+            } else {
+                nodes.push(before);
+            }
         }
 
         // Add highlighted term
@@ -93,9 +107,26 @@ function highlightMedicalTerms(text: string): React.ReactNode[] {
         lastIndex = end;
     });
 
-    // Add remaining text
+    // Add remaining text (with possible source span highlight)
     if (lastIndex < text.length) {
-        nodes.push(text.slice(lastIndex));
+        const remaining = text.slice(lastIndex);
+        if (highlightSpan && highlightSpan.start_char >= lastIndex) {
+            const hlStart = highlightSpan.start_char - lastIndex;
+            const hlEnd = highlightSpan.end_char - lastIndex;
+            const before = remaining.slice(0, hlStart);
+            const highlighted = remaining.slice(hlStart, hlEnd);
+            const after = remaining.slice(hlEnd);
+
+            if (before) nodes.push(before);
+            nodes.push(
+                <span key="source-highlight" className="bg-yellow-500/30 text-yellow-300 px-0.5 rounded animate-pulse">
+                    {highlighted}
+                </span>
+            );
+            if (after) nodes.push(after);
+        } else {
+            nodes.push(remaining);
+        }
     }
 
     return nodes.length > 0 ? nodes : [text];
@@ -104,8 +135,10 @@ function highlightMedicalTerms(text: string): React.ReactNode[] {
 export function LiveTranscript({
     segments,
     isRecording,
+    highlightSpan,
 }: LiveTranscriptProps) {
     const scrollRef = useRef<HTMLDivElement>(null);
+    const highlightRef = useRef<HTMLSpanElement>(null);
 
     // Auto-scroll to bottom
     useEffect(() => {
@@ -113,6 +146,16 @@ export function LiveTranscript({
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
     }, [segments]);
+
+    // Scroll to highlight when span changes
+    useEffect(() => {
+        if (highlightRef.current && highlightSpan) {
+            highlightRef.current.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+            });
+        }
+    }, [highlightSpan]);
 
     return (
         <div className="flex flex-col h-full">
@@ -126,6 +169,11 @@ export function LiveTranscript({
                     <span className="flex items-center gap-1.5 text-xs text-red-400">
                         <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
                         Recording
+                    </span>
+                )}
+                {highlightSpan && (
+                    <span className="text-xs text-yellow-400">
+                        Source highlighted
                     </span>
                 )}
             </div>
@@ -162,7 +210,9 @@ export function LiveTranscript({
                             className="bg-gray-800/50 rounded-lg p-3 border border-gray-700/50 animate-in fade-in slide-in-from-bottom-2 duration-300"
                         >
                             <p className="text-gray-200 leading-relaxed">
-                                {highlightMedicalTerms(segment.text)}
+                                {highlightSpan
+                                    ? highlightMedicalTerms(segment.text, highlightSpan)
+                                    : highlightMedicalTerms(segment.text)}
                             </p>
                             {segment.timestamp && (
                                 <span className="text-xs text-gray-500 mt-1 block">

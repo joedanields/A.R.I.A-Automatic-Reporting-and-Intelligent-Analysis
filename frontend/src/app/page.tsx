@@ -9,6 +9,7 @@ import { LiveTranscript } from "@/components/LiveTranscript";
 import { ThinkingLog } from "@/components/ThinkingLog";
 import { SoapNote } from "@/components/SoapNote";
 import { ComplianceStatus } from "@/components/ComplianceStatus";
+import type { SourceSpan } from "@/types/shared";
 
 const WS_URL = process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:8000/ws/listen";
 
@@ -50,6 +51,7 @@ export default function Home() {
   const [isCompliant, setIsCompliant] = useState(false);
   const [missingFields, setMissingFields] = useState<string[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [activeSpan, setActiveSpan] = useState<SourceSpan | null>(null);
 
   // File upload ref
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -115,6 +117,11 @@ export default function Home() {
 
       case "codes":
         setIcdCodes(latestMessage.data as IcdCode[]);
+        break;
+
+      case "provenance":
+        // F1: Provenance tags streamed from backend
+        // Tags are already embedded in SOAP sections and codes from F1
         break;
 
       case "complete":
@@ -350,6 +357,7 @@ export default function Home() {
           <LiveTranscript
             segments={transcriptSegments}
             isRecording={isRecording}
+            highlightSpan={activeSpan}
           />
         </div>
 
@@ -363,6 +371,7 @@ export default function Home() {
             data={soapNote}
             icdCodes={icdCodes}
             isLoading={isProcessing && thoughts.length > 0}
+            onSpanClick={setActiveSpan}
           />
 
           {/* Section C: Compliance Status */}

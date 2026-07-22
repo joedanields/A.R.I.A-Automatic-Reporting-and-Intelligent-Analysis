@@ -1,24 +1,20 @@
 "use client";
 
-import { FileText, Stethoscope, ClipboardList, PillIcon } from "lucide-react";
-
-interface SOAPSection {
-    title: string;
-    text: string;
-    codes?: Array<{ code: string; description: string }>;
-}
+import { FileText, Stethoscope, ClipboardList, PillIcon, ExternalLink } from "lucide-react";
+import type { SoapSection, SourceSpan, ProvenanceValue } from "@/types/shared";
 
 interface SOAPNoteData {
     resourceType?: string;
     type?: { text: string };
     encounter?: { date: string };
-    section?: SOAPSection[];
+    section?: SoapSection[];
 }
 
 interface SoapNoteProps {
     data: SOAPNoteData | null;
-    icdCodes: Array<{ code: string; description: string; confidence?: string }>;
+    icdCodes: Array<{ code: string; description: string; confidence?: string; provenance?: string; source_span?: SourceSpan }>;
     isLoading: boolean;
+    onSpanClick?: (span: SourceSpan) => void;
 }
 
 function getSectionIcon(title: string) {
@@ -51,7 +47,29 @@ function getSectionColor(title: string) {
     }
 }
 
-export function SoapNote({ data, icdCodes, isLoading }: SoapNoteProps) {
+function getProvenanceBadge(provenance?: ProvenanceValue) {
+    if (!provenance) return null;
+
+    const styles: Record<ProvenanceValue, string> = {
+        heard: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+        retrieved: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+        inferred: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+    };
+
+    const labels: Record<ProvenanceValue, string> = {
+        heard: "Heard",
+        retrieved: "Retrieved",
+        inferred: "Inferred",
+    };
+
+    return (
+        <span className={`text-[10px] px-1.5 py-0.5 rounded border ${styles[provenance]}`}>
+            {labels[provenance]}
+        </span>
+    );
+}
+
+export function SoapNote({ data, icdCodes, isLoading, onSpanClick }: SoapNoteProps) {
     return (
         <div className="bg-gray-900/80 rounded-xl border border-gray-700/50 overflow-hidden">
             {/* Header */}
@@ -86,7 +104,16 @@ export function SoapNote({ data, icdCodes, isLoading }: SoapNoteProps) {
                         {data.section.map((section, index) => (
                             <div
                                 key={index}
-                                className={`rounded-lg border p-3 ${getSectionColor(section.title)}`}
+                                className={`rounded-lg border p-3 ${getSectionColor(section.title)} ${
+                                    section.source_span && onSpanClick
+                                        ? "cursor-pointer hover:bg-white/5 transition-colors"
+                                        : ""
+                                }`}
+                                onClick={() => {
+                                    if (section.source_span && onSpanClick) {
+                                        onSpanClick(section.source_span);
+                                    }
+                                }}
                             >
                                 <div className="flex items-center gap-2 mb-2">
                                     <span className="text-gray-400">
@@ -95,6 +122,10 @@ export function SoapNote({ data, icdCodes, isLoading }: SoapNoteProps) {
                                     <h4 className="text-sm font-medium text-gray-200">
                                         {section.title}
                                     </h4>
+                                    {getProvenanceBadge(section.provenance)}
+                                    {section.source_span && onSpanClick && (
+                                        <ExternalLink className="w-3 h-3 text-gray-500" />
+                                    )}
                                 </div>
                                 <p className="text-sm text-gray-400 leading-relaxed">
                                     {section.text || "Pending..."}
@@ -112,12 +143,22 @@ export function SoapNote({ data, icdCodes, isLoading }: SoapNoteProps) {
                                     {icdCodes.map((code, index) => (
                                         <div
                                             key={index}
-                                            className="flex items-center gap-1.5 bg-gray-800 rounded-full px-2.5 py-1 border border-gray-700"
+                                            className={`flex items-center gap-1.5 bg-gray-800 rounded-full px-2.5 py-1 border border-gray-700 ${
+                                                code.source_span && onSpanClick
+                                                    ? "cursor-pointer hover:bg-gray-700 transition-colors"
+                                                    : ""
+                                            }`}
                                             title={code.description}
+                                            onClick={() => {
+                                                if (code.source_span && onSpanClick) {
+                                                    onSpanClick(code.source_span);
+                                                }
+                                            }}
                                         >
                                             <span className="text-xs font-mono text-cyan-400">
                                                 {code.code}
                                             </span>
+                                            {getProvenanceBadge(code.provenance as ProvenanceValue)}
                                             {code.confidence && (
                                                 <span
                                                     className={`text-[10px] px-1 rounded ${code.confidence === "high"

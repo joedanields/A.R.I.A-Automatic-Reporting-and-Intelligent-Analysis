@@ -7,6 +7,8 @@ type MessageType =
     | "thought"
     | "soap"
     | "codes"
+    | "provenance"
+    | "validation"
     | "status"
     | "error"
     | "complete";
