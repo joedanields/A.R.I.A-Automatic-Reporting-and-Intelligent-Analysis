@@ -1,0 +1,29 @@
+{
+  "id": "case_001",
+  "description": "Simple diabetes follow-up, English only",
+  "transcript": "Doctor: Good morning, how are you feeling today?\nPatient: I'm doing okay doctor, but I've been feeling a bit tired lately.\nDoctor: Are you taking your metformin regularly?\nPatient: Yes, I take it twice a day with breakfast and dinner.\nDoctor: Any side effects? Stomach issues?\nPatient: No, nothing like that.\nDoctor: Let me check your blood sugar. Your fasting glucose is 142 mg/dL and HbA1c is 7.2 percent.\nPatient: Is that good?\nDoctor: It's improved from last time but we'd like to get it below 7. Let me also check your blood pressure. It's 130 over 85. A bit elevated.\nPatient: Should I be worried?\nDoctor: Not at all, let's continue the metformin 500mg twice daily and add amlodipine 5mg for the blood pressure. Come back in three months.",
+  "expected": {
+    "entities": [
+      {"text": "metformin", "type": "medication", "source": "heard"},
+      {"text": "twice a day", "type": "dosage", "source": "heard"},
+      {"text": "fasting glucose", "type": "vital", "source": "heard"},
+      {"text": "142 mg/dL", "type": "vital_value", "source": "heard"},
+      {"text": "HbA1c", "type": "vital", "source": "heard"},
+      {"text": "7.2 percent", "type": "vital_value", "source": "heard"},
+      {"text": "blood pressure", "type": "vital", "source": "heard"},
+      {"text": "130 over 85", "type": "vital_value", "source": "heard"},
+      {"text": "amlodipine", "type": "medication", "source": "heard"},
+      {"text": "5mg", "type": "dosage", "source": "heard"}
+    ],
+    "codes": [
+      {"code": "E11.9", "description": "Type 2 diabetes mellitus without complications", "source": "retrieved"},
+      {"code": "I10", "description": "Essential (primary) hypertension", "source": "retrieved"}
+    ],
+    "soap": {
+      "subjective": "Patient reports feeling tired but otherwise okay. Taking metformin twice daily without side effects.",
+      "objective": "Fasting glucose 142 mg/dL, HbA1c 7.2%, blood pressure 130/85 mmHg.",
+      "assessment": "Type 2 diabetes mellitus (E11.9) - improved but not at target. Essential hypertension (I10) - mildly elevated.",
+      "plan": "Continue metformin 500mg twice daily. Start amlodipine 5mg daily for hypertension. Follow up in 3 months."
+    }
+  }
+}

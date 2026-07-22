@@ -320,6 +320,96 @@ async def model_status():
 
 
 # =============================================================================
+# Evaluation Endpoint (F13)
+# =============================================================================
+
+class EvalRequest(BaseModel):
+    case_ids: Optional[list[str]] = None
+
+
+@app.post("/api/eval")
+async def run_evaluation(request: EvalRequest = EvalRequest()):
+    """
+    Run evaluation harness on gold test cases.
+
+    Returns metrics: WER, entity F1, code accuracy, SOAP similarity.
+    Optionally filter to specific case_ids.
+    """
+    try:
+        from services.eval_harness import EvalHarness
+
+        harness = EvalHarness()
+        result = harness.run_eval(request.case_ids)
+
+        return JSONResponse({
+            "success": True,
+            "run_id": result.run_id,
+            "timestamp": result.timestamp,
+            "total_cases": result.total_cases,
+            "passed_cases": result.passed_cases,
+            "metrics": {
+                "avg_wer": result.avg_wer,
+                "avg_entity_f1": result.avg_entity_f1,
+                "avg_code_accuracy": result.avg_code_accuracy,
+                "avg_soap_similarity": result.avg_soap_similarity,
+            },
+            "duration_seconds": result.duration_seconds,
+            "cases": [
+                {
+                    "case_id": cr.case_id,
+                    "description": cr.description,
+                    "passed": cr.passed,
+                    "wer": cr.wer,
+                    "entity_f1": cr.entity_f1,
+                    "code_accuracy": cr.code_accuracy,
+                    "soap_similarity": cr.soap_similarity,
+                    "error": cr.error,
+                }
+                for cr in result.case_results
+            ]
+        })
+    except Exception as e:
+        logger.error(f"Evaluation error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/eval/history")
+async def eval_history():
+    """Get historical evaluation results."""
+    try:
+        from services.eval_harness import EvalHarness, RESULTS_DIR
+        import os
+
+        harness = EvalHarness()
+        results = []
+
+        if RESULTS_DIR.exists():
+            for result_file in sorted(RESULTS_DIR.glob("eval_*.json"), reverse=True):
+                try:
+                    with open(result_file, encoding="utf-8") as f:
+                        data = json.load(f)
+                    results.append({
+                        "run_id": data.get("run_id"),
+                        "timestamp": data.get("timestamp"),
+                        "total_cases": data.get("total_cases"),
+                        "passed_cases": data.get("passed_cases"),
+                        "avg_wer": data.get("avg_wer"),
+                        "avg_entity_f1": data.get("avg_entity_f1"),
+                        "avg_code_accuracy": data.get("avg_code_accuracy"),
+                        "duration_seconds": data.get("duration_seconds"),
+                    })
+                except Exception as e:
+                    logger.error(f"Failed to load {result_file}: {e}")
+
+        return JSONResponse({
+            "success": True,
+            "history": results[:50]  # Last 50 runs
+        })
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# =============================================================================
 # Startup/Shutdown
 # =============================================================================
 
