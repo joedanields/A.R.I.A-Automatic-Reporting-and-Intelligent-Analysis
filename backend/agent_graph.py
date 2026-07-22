@@ -26,6 +26,7 @@ from agents.scribe import scribe_node  # noqa: F401
 from agents.coder import coder_node  # noqa: F401
 from agents.auditor import auditor_node  # noqa: F401
 from agents.validator import validator_node  # noqa: F401
+from services.patient_context import load_patient_context
 
 logger = logging.getLogger(__name__)
 
@@ -57,16 +58,25 @@ def create_graph() -> StateGraph:
     return workflow.compile()
 
 
-def process_transcript(transcript: str) -> AgentState:
+def process_transcript(
+    transcript: str,
+    patient_id: str | None = None,
+    abha_id: str | None = None,
+) -> AgentState:
     """Process a transcript through the full agent pipeline.
 
     Args:
         transcript: Raw transcribed text
+        patient_id: Optional patient ID for longitudinal context (F16)
+        abha_id: Optional ABHA ID for longitudinal context (F16)
 
     Returns:
         Final AgentState with SOAP note and all metadata
     """
     graph = create_graph()
+
+    # F16: Load prior visit context
+    patient_context = load_patient_context(patient_id=patient_id, abha_id=abha_id)
 
     initial_state: AgentState = {
         "transcript": transcript,
@@ -81,6 +91,7 @@ def process_transcript(transcript: str) -> AgentState:
         "current_agent": "",
         "provenance_tags": [],
         "validation": {},
+        "patient_context": patient_context,
     }
 
     result = graph.invoke(initial_state)
@@ -91,13 +102,25 @@ def process_transcript(transcript: str) -> AgentState:
 # Streaming Interface (for WebSocket)
 # =============================================================================
 
-async def process_transcript_streaming(transcript: str):
+async def process_transcript_streaming(
+    transcript: str,
+    patient_id: str | None = None,
+    abha_id: str | None = None,
+):
     """Process transcript with streaming updates for real-time UI.
+
+    Args:
+        transcript: Raw transcribed text
+        patient_id: Optional patient ID for longitudinal context (F16)
+        abha_id: Optional ABHA ID for longitudinal context (F16)
 
     Yields:
         dict: {"type": "thought"|"soap"|"codes"|"procedures"|"provenance"|"validation"|"complete", "data": ...}
     """
     graph = create_graph()
+
+    # F16: Load prior visit context
+    patient_context = load_patient_context(patient_id=patient_id, abha_id=abha_id)
 
     initial_state: AgentState = {
         "transcript": transcript,
@@ -112,6 +135,7 @@ async def process_transcript_streaming(transcript: str):
         "current_agent": "",
         "provenance_tags": [],
         "validation": {},
+        "patient_context": patient_context,
     }
 
     # Stream through nodes

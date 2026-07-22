@@ -32,6 +32,9 @@ class AgentState(TypedDict):
     # Final Output
     soap_note: dict
 
+    # F16: Longitudinal patient context (prior visit summaries)
+    patient_context: str
+
     # Workflow Metadata
     agent_thoughts: Annotated[list[str], add]  # Accumulates across nodes
     current_agent: str

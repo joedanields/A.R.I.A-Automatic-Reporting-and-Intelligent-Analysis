@@ -21,6 +21,7 @@ from services.vocab_corrector import get_corrector
 from services.drug_corrector import get_drug_corrector
 from services.procedure_suggester import get_procedure_suggester
 from services.record_store import get_record_store
+from services.patient_context import load_patient_context, get_patient_history_list
 from agent_graph import process_transcript_streaming, process_transcript
 
 # =============================================================================
@@ -282,6 +283,8 @@ async def websocket_listen(websocket: WebSocket):
 
 class TranscriptRequest(BaseModel):
     text: str
+    patient_id: str | None = None
+    abha_id: str | None = None
 
 
 @app.post("/api/process")
@@ -290,7 +293,11 @@ async def process_text(request: TranscriptRequest):
     Process text through the agent pipeline (non-streaming).
     """
     try:
-        result = process_transcript(request.text)
+        result = process_transcript(
+            request.text,
+            patient_id=request.patient_id,
+            abha_id=request.abha_id,
+        )
         return JSONResponse({
             "success": True,
             "soap_note": result.get("soap_note", {}),
@@ -583,7 +590,43 @@ async def export_record(record_id: str):
     except Exception as e:
         logger.error(f"Record export error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# =============================================================================
+# Patient Context / History (F16)
+# =============================================================================
+
+@app.get("/api/patients/{patient_id}/history")
+async def get_patient_history(patient_id: str, limit: int = 20, offset: int = 0):
+    """Get visit history for a patient."""
+    try:
+        records = get_patient_history_list(patient_id=patient_id, limit=limit, offset=offset)
+        store = get_record_store()
+        total = store.count(patient_id=patient_id)
+        return JSONResponse({
+            "success": True,
+            "patient_id": patient_id,
+            "total": total,
+            "visits": records,
+        })
     except Exception as e:
+        logger.error(f"Patient history error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/patients/{patient_id}/context")
+async def get_patient_context(patient_id: str):
+    """Get longitudinal patient context for the current consult."""
+    try:
+        context = load_patient_context(patient_id=patient_id)
+        return JSONResponse({
+            "success": True,
+            "patient_id": patient_id,
+            "has_history": bool(context),
+            "context": context,
+        })
+    except Exception as e:
+        logger.error(f"Patient context error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

@@ -65,6 +65,7 @@ def auditor_node(state: AgentState) -> AgentState:
     procedure_codes = state.get("procedure_codes", [])  # F12
     transcript = state.get("normalized_transcript", state["transcript"])
     raw_transcript = state["transcript"]
+    patient_context = state.get("patient_context", "")  # F16
 
     missing: list[str] = []
     if not any(e.get("type") == "symptom" for e in entities):
@@ -80,6 +81,9 @@ SOAP Format:
 - Objective: Vital signs, examination findings
 - Assessment: Diagnosis with ICD-10 codes
 - Plan: Treatment, medications, follow-up, and suggested procedure codes
+
+If prior patient history is provided, reference relevant prior conditions, medications,
+and changes from previous visits in the Assessment and Plan sections.
 
 Respond in JSON matching ABDM FHIR OPConsultRecord structure:
 {
@@ -102,12 +106,17 @@ Note: procedure_codes in Plan should be suggestions only, always marked "suggest
         for p in procedure_codes[:5]
     ]) if procedure_codes else "None identified"
 
+    # F16: Build context prompt
+    context_str = ""
+    if patient_context:
+        context_str = f"\n\nPrior Patient History:\n{patient_context}\n"
+
     messages = [
         SystemMessage(content=system_prompt),
         HumanMessage(
             content=f"""
 Transcript: {transcript}
-
+{context_str}
 Medical Entities: {json.dumps(entities)}
 
 ICD-10 Codes: {code_str}
