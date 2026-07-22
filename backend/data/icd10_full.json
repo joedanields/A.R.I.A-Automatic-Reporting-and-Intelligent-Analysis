@@ -1,0 +1,1272 @@
+[
+  {
+    "code": "E11.9",
+    "description": "Type 2 diabetes mellitus without complications",
+    "keywords": ["diabetes", "type 2", "blood sugar", "glucose", "hyperglycemia"]
+  },
+  {
+    "code": "E11.65",
+    "description": "Type 2 diabetes mellitus with hyperglycemia",
+    "keywords": ["diabetes", "high blood sugar", "hyperglycemia", "uncontrolled diabetes"]
+  },
+  {
+    "code": "E11.21",
+    "description": "Type 2 diabetes mellitus with diabetic nephropathy",
+    "keywords": ["diabetes", "kidney disease", "diabetic nephropathy", "renal"]
+  },
+  {
+    "code": "E11.311",
+    "description": "Type 2 diabetes mellitus with unspecified diabetic retinopathy with macular edema",
+    "keywords": ["diabetes", "diabetic retinopathy", "eye disease", "macular edema"]
+  },
+  {
+    "code": "E10.9",
+    "description": "Type 1 diabetes mellitus without complications",
+    "keywords": ["diabetes", "type 1", "insulin dependent", "blood sugar"]
+  },
+  {
+    "code": "E03.9",
+    "description": "Hypothyroidism, unspecified",
+    "keywords": ["hypothyroid", "underactive thyroid", "thyroid", "low thyroid"]
+  },
+  {
+    "code": "E05.90",
+    "description": "Hyperthyroidism, unspecified",
+    "keywords": ["hyperthyroid", "overactive thyroid", "thyroid", "Graves"]
+  },
+  {
+    "code": "E04.10",
+    "description": "Nontoxic goiter, unspecified",
+    "keywords": ["goiter", "thyroid enlargement", "swollen thyroid", "neck swelling"]
+  },
+  {
+    "code": "E78.00",
+    "description": "Pure hypercholesterolemia, unspecified",
+    "keywords": ["high cholesterol", "hyperlipidemia", "lipid", "cholesterol"]
+  },
+  {
+    "code": "E78.5",
+    "description": "Hyperlipidemia, unspecified",
+    "keywords": ["hyperlipidemia", "high lipids", "fat in blood", "dyslipidemia"]
+  },
+  {
+    "code": "E66.01",
+    "description": "Morbid (severe) obesity due to excess calories",
+    "keywords": ["obesity", "morbid obesity", "BMI high", "weight", "overweight"]
+  },
+  {
+    "code": "E66.9",
+    "description": "Obesity, unspecified",
+    "keywords": ["obesity", "overweight", "weight gain", "BMI"]
+  },
+  {
+    "code": "E03.89",
+    "description": "Other specified hypothyroidism",
+    "keywords": ["hypothyroid", "thyroid disorder", "fatigue", "weight gain"]
+  },
+  {
+    "code": "E21.1",
+    "description": "Hyperprolactinemia, not elsewhere classified",
+    "keywords": ["prolactin", "hormone", "pituitary", "menstrual irregularity"]
+  },
+  {
+    "code": "E16.2",
+    "description": "Hypoglycemia, unspecified",
+    "keywords": ["low blood sugar", "hypoglycemia", "dizziness", "shakiness"]
+  },
+  {
+    "code": "E13.9",
+    "description": "Other specified diabetes mellitus without complications",
+    "keywords": ["diabetes", "secondary diabetes", "blood sugar"]
+  },
+  {
+    "code": "E55.9",
+    "description": "Vitamin D deficiency, unspecified",
+    "keywords": ["vitamin D", "deficiency", "bone pain", "low vitamin D"]
+  },
+  {
+    "code": "E61.1",
+    "description": "Iron deficiency",
+    "keywords": ["iron", "deficiency", "anemia", "low iron"]
+  },
+  {
+    "code": "E11.40",
+    "description": "Type 2 diabetes mellitus with diabetic neuropathy, unspecified",
+    "keywords": ["diabetes", "neuropathy", "nerve damage", "numbness", "tingling"]
+  },
+  {
+    "code": "E05.00",
+    "description": "Thyrotoxicosis with diffuse goiter without mention of thyrotoxic crisis or storm",
+    "keywords": ["hyperthyroid", "Graves disease", "goiter", "thyroid"]
+  },
+  {
+    "code": "I10",
+    "description": "Essential (primary) hypertension",
+    "keywords": ["hypertension", "high blood pressure", "BP high", "elevated BP"]
+  },
+  {
+    "code": "I11.9",
+    "description": "Hypertensive heart disease without heart failure",
+    "keywords": ["hypertension", "heart disease", "high blood pressure", "cardiac"]
+  },
+  {
+    "code": "I11.0",
+    "description": "Hypertensive heart disease with heart failure",
+    "keywords": ["hypertension", "heart failure", "high blood pressure", "cardiac"]
+  },
+  {
+    "code": "I50.9",
+    "description": "Heart failure, unspecified",
+    "keywords": ["heart failure", "cardiac failure", "CHF", "weak heart"]
+  },
+  {
+    "code": "I50.22",
+    "description": "Chronic systolic heart failure",
+    "keywords": ["heart failure", "systolic", "cardiac", "pump failure"]
+  },
+  {
+    "code": "I25.10",
+    "description": "Atherosclerotic heart disease of native coronary artery without angina pectoris",
+    "keywords": ["coronary artery disease", "CAD", "atherosclerosis", "heart disease", "angina"]
+  },
+  {
+    "code": "I20.9",
+    "description": "Angina pectoris, unspecified",
+    "keywords": ["angina", "chest pain", "cardiac pain", "heart pain"]
+  },
+  {
+    "code": "I21.9",
+    "description": "Acute myocardial infarction, unspecified",
+    "keywords": ["heart attack", "MI", "myocardial infarction", "acute coronary"]
+  },
+  {
+    "code": "I48.91",
+    "description": "Unspecified atrial fibrillation",
+    "keywords": ["atrial fibrillation", "AFib", "irregular heartbeat", "arrhythmia"]
+  },
+  {
+    "code": "I49.3",
+    "description": "Ventricular premature depolarization",
+    "keywords": ["PVC", "premature ventricular", "extra beat", "palpitations"]
+  },
+  {
+    "code": "I63.9",
+    "description": "Cerebral infarction, unspecified",
+    "keywords": ["stroke", "cerebral infarction", "brain attack", "ischemic stroke"]
+  },
+  {
+    "code": "I62.9",
+    "description": "Intracranial hemorrhage (nontraumatic), unspecified",
+    "keywords": ["hemorrhagic stroke", "brain bleed", "intracranial hemorrhage"]
+  },
+  {
+    "code": "I73.9",
+    "description": "Peripheral vascular disease, unspecified",
+    "keywords": ["PVD", "peripheral vascular", "poor circulation", "claudication"]
+  },
+  {
+    "code": "I74.3",
+    "description": "Embolism and thrombosis of arteries of the extremities",
+    "keywords": ["blood clot", "DVT", "deep vein thrombosis", "embolism"]
+  },
+  {
+    "code": "I25.5",
+    "description": "Ischemic cardiomyopathy",
+    "keywords": ["ischemic", "cardiomyopathy", "heart muscle", "weak heart"]
+  },
+  {
+    "code": "I42.9",
+    "description": "Cardiomyopathy, unspecified",
+    "keywords": ["cardiomyopathy", "heart muscle disease", "weak heart"]
+  },
+  {
+    "code": "I35.0",
+    "description": "Nonrheumatic aortic (valve) stenosis",
+    "keywords": ["aortic stenosis", "valve disease", "heart valve", "cardiac"]
+  },
+  {
+    "code": "I34.0",
+    "description": "Nonrheumatic mitral (valve) regurgitation",
+    "keywords": ["mitral regurgitation", "valve leak", "heart valve", "murmur"]
+  },
+  {
+    "code": "I70.1",
+    "description": "Atherosclerosis of renal artery",
+    "keywords": ["renal artery", "atherosclerosis", "kidney", "renovascular"]
+  },
+  {
+    "code": "J06.9",
+    "description": "Acute upper respiratory infection, unspecified",
+    "keywords": ["cold", "cough", "URI", "upper respiratory", "sore throat"]
+  },
+  {
+    "code": "J02.9",
+    "description": "Acute pharyngitis, unspecified",
+    "keywords": ["sore throat", "pharyngitis", "throat infection", "strep throat"]
+  },
+  {
+    "code": "J03.90",
+    "description": "Acute tonsillitis, unspecified",
+    "keywords": ["tonsillitis", "sore throat", "swollen tonsils", "throat infection"]
+  },
+  {
+    "code": "J01.90",
+    "description": "Acute sinusitis, unspecified",
+    "keywords": ["sinusitis", "sinus infection", "sinus pain", "facial pain"]
+  },
+  {
+    "code": "J20.9",
+    "description": "Acute bronchitis, unspecified",
+    "keywords": ["bronchitis", "chest cough", "acute cough", "bronchial infection"]
+  },
+  {
+    "code": "J44.1",
+    "description": "Chronic obstructive pulmonary disease with acute exacerbation",
+    "keywords": ["COPD", "chronic bronchitis", "emphysema", "lung disease"]
+  },
+  {
+    "code": "J44.9",
+    "description": "Chronic obstructive pulmonary disease, unspecified",
+    "keywords": ["COPD", "obstructive lung", "breathing difficulty", "chronic lung"]
+  },
+  {
+    "code": "J45.20",
+    "description": "Mild intermittent asthma, uncomplicated",
+    "keywords": ["asthma", "wheezing", "airway", "bronchospasm"]
+  },
+  {
+    "code": "J45.30",
+    "description": "Mild persistent asthma, uncomplicated",
+    "keywords": ["asthma", "persistent", "wheezing", "breathing"]
+  },
+  {
+    "code": "J45.40",
+    "description": "Moderate persistent asthma, uncomplicated",
+    "keywords": ["asthma", "moderate", "wheezing", "inhaler"]
+  },
+  {
+    "code": "J45.50",
+    "description": "Severe persistent asthma, uncomplicated",
+    "keywords": ["asthma", "severe", "wheezing", "emergency", "status asthmaticus"]
+  },
+  {
+    "code": "J18.9",
+    "description": "Pneumonia, unspecified organism",
+    "keywords": ["pneumonia", "lung infection", "chest infection", "pulmonary"]
+  },
+  {
+    "code": "J15.9",
+    "description": "Bacterial pneumonia, unspecified",
+    "keywords": ["bacterial pneumonia", "lung infection", "bacterial infection"]
+  },
+  {
+    "code": "J12.9",
+    "description": "Viral pneumonia, unspecified",
+    "keywords": ["viral pneumonia", "lung infection", "viral infection"]
+  },
+  {
+    "code": "J96.00",
+    "description": "Acute respiratory failure, unspecified whether hypoxia or hypercapnia",
+    "keywords": ["respiratory failure", "acute respiratory", "ventilator", "breathing failure"]
+  },
+  {
+    "code": "J96.10",
+    "description": "Chronic respiratory failure, unspecified whether hypoxia or hypercapnia",
+    "keywords": ["chronic respiratory failure", "long-term breathing", "O2 therapy"]
+  },
+  {
+    "code": "J80",
+    "description": "Acute respiratory distress syndrome",
+    "keywords": ["ARDS", "respiratory distress", "acute lung injury", "oxygen failure"]
+  },
+  {
+    "code": "J82",
+    "description": "Pulmonary eosinophilia, not elsewhere classified",
+    "keywords": ["eosinophilic", "pulmonary", "lung inflammation", "allergic"]
+  },
+  {
+    "code": "J98.01",
+    "description": "Bronchiectasis",
+    "keywords": ["bronchiectasis", "dilated airways", "chronic cough", "mucus"]
+  },
+  {
+    "code": "J47",
+    "description": "Bronchiectasis",
+    "keywords": ["bronchiectasis", "airway damage", "chronic lung", "mucus"]
+  },
+  {
+    "code": "J43.9",
+    "description": "Emphysema, unspecified",
+    "keywords": ["emphysema", "lung damage", "COPD", "alveolar destruction"]
+  },
+  {
+    "code": "J30.1",
+    "description": "Allergic rhinitis due to pollen",
+    "keywords": ["hay fever", "allergic rhinitis", "pollen allergy", "seasonal allergy"]
+  },
+  {
+    "code": "J30.2",
+    "description": "Other seasonal allergic rhinitis",
+    "keywords": ["seasonal allergy", "rhinitis", "sneezing", "runny nose"]
+  },
+  {
+    "code": "J30.3",
+    "description": "Other allergic rhinitis",
+    "keywords": ["allergic rhinitis", "dust allergy", "perennial allergy"]
+  },
+  {
+    "code": "J31.0",
+    "description": "Chronic rhinitis",
+    "keywords": ["chronic rhinitis", "runny nose", "nasal congestion", "post-nasal drip"]
+  },
+  {
+    "code": "K21.0",
+    "description": "Gastroesophageal reflux disease with esophagitis",
+    "keywords": ["GERD", "acid reflux", "heartburn", "acidity", "gastric reflux"]
+  },
+  {
+    "code": "K21.9",
+    "description": "Gastroesophageal reflux disease without esophagitis",
+    "keywords": ["GERD", "acid reflux", "heartburn", "acidic taste"]
+  },
+  {
+    "code": "K29.00",
+    "description": "Acute hemorrhagic gastritis without bleeding",
+    "keywords": ["gastritis", "stomach inflammation", "stomach pain", "gastric"]
+  },
+  {
+    "code": "K29.50",
+    "description": "Chronic gastritis, unspecified",
+    "keywords": ["chronic gastritis", "stomach inflammation", "stomach pain"]
+  },
+  {
+    "code": "K25.9",
+    "description": "Gastric ulcer, unspecified as acute or chronic, without hemorrhage or perforation",
+    "keywords": ["peptic ulcer", "gastric ulcer", "stomach ulcer", "ulcer"]
+  },
+  {
+    "code": "K26.9",
+    "description": "Duodenal ulcer, unspecified as acute or chronic, without hemorrhage or perforation",
+    "keywords": ["duodenal ulcer", "peptic ulcer", "abdominal pain", "ulcer"]
+  },
+  {
+    "code": "K58.9",
+    "description": "Irritable bowel syndrome without diarrhea",
+    "keywords": ["IBS", "irritable bowel", "abdominal cramps", "bloating"]
+  },
+  {
+    "code": "K58.0",
+    "description": "Irritable bowel syndrome with diarrhea",
+    "keywords": ["IBS-D", "diarrhea", "irritable bowel", "loose stools"]
+  },
+  {
+    "code": "K59.00",
+    "description": "Constipation, unspecified",
+    "keywords": ["constipation", "difficulty passing stool", "hard stool", "infrequent bowel"]
+  },
+  {
+    "code": "K59.1",
+    "description": "Functional diarrhea",
+    "keywords": ["diarrhea", "functional", "loose stools", "frequent bowel"]
+  },
+  {
+    "code": "K80.20",
+    "description": "Calculus of gallbladder without cholecystitis without obstruction",
+    "keywords": ["gallstones", "gall bladder", "biliary colic", "abdominal pain"]
+  },
+  {
+    "code": "K80.00",
+    "description": "Calculus of gallbladder with acute cholecystitis without obstruction",
+    "keywords": ["gallstones", "cholecystitis", "gall bladder infection", "RUQ pain"]
+  },
+  {
+    "code": "K76.0",
+    "description": "Fatty (change of) liver, not elsewhere classified",
+    "keywords": ["fatty liver", "NAFLD", "hepatic steatosis", "liver"]
+  },
+  {
+    "code": "K75.81",
+    "description": "Nonalcoholic steatohepatitis",
+    "keywords": ["NASH", "nonalcoholic", "fatty liver", "liver inflammation"]
+  },
+  {
+    "code": "K70.30",
+    "description": "Alcoholic cirrhosis of liver without ascites",
+    "keywords": ["cirrhosis", "alcoholic liver", "liver disease", "portal hypertension"]
+  },
+  {
+    "code": "K73.9",
+    "description": "Chronic hepatitis, unspecified",
+    "keywords": ["chronic hepatitis", "liver inflammation", "liver disease"]
+  },
+  {
+    "code": "K65.0",
+    "description": "Generalized (acute) peritonitis",
+    "keywords": ["peritonitis", "abdominal infection", "abdominal pain", "inflammation"]
+  },
+  {
+    "code": "K35.80",
+    "description": "Unspecified acute appendicitis",
+    "keywords": ["appendicitis", "RLQ pain", "appendix", "abdominal pain"]
+  },
+  {
+    "code": "K60.2",
+    "description": "Anal fissure, unspecified",
+    "keywords": ["anal fissure", "rectal pain", "painful defecation", "crack"]
+  },
+  {
+    "code": "K62.5",
+    "description": "Rectal prolapse",
+    "keywords": ["rectal prolapse", "prolapse", "rectal", "bulging"]
+  },
+  {
+    "code": "K94.23",
+    "description": "Colostomy malfunction",
+    "keywords": ["colostomy", "stoma", "bag", "intestinal"]
+  },
+  {
+    "code": "M54.5",
+    "description": "Low back pain",
+    "keywords": ["back pain", "lower back", "lumbar pain", "backache"]
+  },
+  {
+    "code": "M54.2",
+    "description": "Cervicalgia (neck pain)",
+    "keywords": ["neck pain", "cervical", "cervicalgia", "stiff neck"]
+  },
+  {
+    "code": "M54.6",
+    "description": "Pain in thoracic spine",
+    "keywords": ["upper back pain", "thoracic pain", "mid back", "back pain"]
+  },
+  {
+    "code": "M54.4",
+    "description": "Lumbago with sciatica",
+    "keywords": ["sciatica", "back pain", "leg pain", "nerve pain", "radiating pain"]
+  },
+  {
+    "code": "M51.16",
+    "description": "Intervertebral disc disorders with radiculopathy, lumbar region",
+    "keywords": ["disc herniation", "slipped disc", "radiculopathy", "nerve compression"]
+  },
+  {
+    "code": "M75.00",
+    "description": "Adhesive capsulitis of unspecified shoulder",
+    "keywords": ["frozen shoulder", "shoulder pain", "limited motion", "capsulitis"]
+  },
+  {
+    "code": "M75.10",
+    "description": "Rotator cuff syndrome of unspecified shoulder, not specified as traumatic",
+    "keywords": ["rotator cuff", "shoulder injury", "shoulder pain", "tendon"]
+  },
+  {
+    "code": "M17.11",
+    "description": "Primary osteoarthritis, right knee",
+    "keywords": ["osteoarthritis", "knee arthritis", "joint pain", "degeneration"]
+  },
+  {
+    "code": "M17.12",
+    "description": "Primary osteoarthritis, left knee",
+    "keywords": ["osteoarthritis", "knee arthritis", "joint pain", "degeneration"]
+  },
+  {
+    "code": "M19.011",
+    "description": "Primary osteoarthritis, right shoulder",
+    "keywords": ["osteoarthritis", "shoulder arthritis", "joint pain"]
+  },
+  {
+    "code": "M16.11",
+    "description": "Primary osteoarthritis, right hip",
+    "keywords": ["osteoarthritis", "hip arthritis", "joint pain", "hip pain"]
+  },
+  {
+    "code": "M16.12",
+    "description": "Primary osteoarthritis, left hip",
+    "keywords": ["osteoarthritis", "hip arthritis", "joint pain", "hip pain"]
+  },
+  {
+    "code": "M10.00",
+    "description": "Gout due to renal impairment, unspecified site",
+    "keywords": ["gout", "urate", "joint inflammation", "swollen joint"]
+  },
+  {
+    "code": "M10.9",
+    "description": "Gout, unspecified",
+    "keywords": ["gout", "joint pain", "swelling", "urate", "inflammation"]
+  },
+  {
+    "code": "M05.79",
+    "description": "Rheumatoid arthritis with rheumatoid factor of multiple sites without organ or systems involvement",
+    "keywords": ["rheumatoid arthritis", "RA", "autoimmune", "joint pain", "swelling"]
+  },
+  {
+    "code": "M06.09",
+    "description": "Rheumatoid arthritis without rheumatoid factor, multiple sites without organ or systems involvement",
+    "keywords": ["rheumatoid arthritis", "seronegative", "joint pain", "autoimmune"]
+  },
+  {
+    "code": "M79.3",
+    "description": "Panniculitis, unspecified",
+    "keywords": ["panniculitis", "fat inflammation", "tender nodules"]
+  },
+  {
+    "code": "M79.5",
+    "description": "Residual foreign body in soft tissue",
+    "keywords": ["foreign body", "soft tissue", "embedded", "splinter"]
+  },
+  {
+    "code": "S52.501A",
+    "description": "Unspecified fracture of the lower end of right radius, initial encounter",
+    "keywords": ["wrist fracture", "radius fracture", "forearm fracture", "broken wrist"]
+  },
+  {
+    "code": "S72.001A",
+    "description": "Fracture of unspecified part of neck of femur, right hip, initial encounter",
+    "keywords": ["hip fracture", "femur fracture", "broken hip", "neck of femur"]
+  },
+  {
+    "code": "S82.001A",
+    "description": "Fracture of unspecified part of patella, right knee, initial encounter",
+    "keywords": ["kneecap fracture", "patella fracture", "broken knee", "knee injury"]
+  },
+  {
+    "code": "S22.41XA",
+    "description": "Fracture of one rib, right side, initial encounter",
+    "keywords": ["rib fracture", "broken rib", "chest pain", "rib injury"]
+  },
+  {
+    "code": "S06.0X0A",
+    "description": "Concussion without loss of consciousness, initial encounter",
+    "keywords": ["concussion", "head injury", "brain injury", "mTBI"]
+  },
+  {
+    "code": "S42.301A",
+    "description": "Unspecified fracture of humerus, right arm, initial encounter",
+    "keywords": ["arm fracture", "humerus fracture", "broken arm", "upper extremity"]
+  },
+  {
+    "code": "T14.8XXA",
+    "description": "Injury, unspecified, initial encounter",
+    "keywords": ["injury", "trauma", "unspecified injury", "accident"]
+  },
+  {
+    "code": "M48.06",
+    "description": "Spinal stenosis, lumbar region",
+    "keywords": ["spinal stenosis", "narrowing spine", "back pain", "nerve compression"]
+  },
+  {
+    "code": "M48.07",
+    "description": "Spinal stenosis, lumbosacral region",
+    "keywords": ["lumbar stenosis", "spinal narrowing", "neurogenic claudication"]
+  },
+  {
+    "code": "M99.13",
+    "description": "Subluxation complex (vertebral), lumbar region",
+    "keywords": ["subluxation", "vertebral", "spinal misalignment"]
+  },
+  {
+    "code": "N39.0",
+    "description": "Urinary tract infection, site not specified",
+    "keywords": ["UTI", "urinary infection", "burning urination", "dysuria"]
+  },
+  {
+    "code": "N10",
+    "description": "Acute pyelonephritis",
+    "keywords": ["pyelonephritis", "kidney infection", "kidney pain", "flank pain"]
+  },
+  {
+    "code": "N18.9",
+    "description": "Chronic kidney disease, unspecified",
+    "keywords": ["kidney disease", "chronic renal", "CKD", "renal failure"]
+  },
+  {
+    "code": "N18.3",
+    "description": "Chronic kidney disease, stage 3 (moderate)",
+    "keywords": ["CKD stage 3", "moderate kidney disease", "renal function"]
+  },
+  {
+    "code": "N18.4",
+    "description": "Chronic kidney disease, stage 4 (severe)",
+    "keywords": ["CKD stage 4", "severe kidney disease", "approaching dialysis"]
+  },
+  {
+    "code": "N18.5",
+    "description": "Chronic kidney disease, stage 5",
+    "keywords": ["CKD stage 5", "end stage renal", "ESRD", "dialysis"]
+  },
+  {
+    "code": "N40.0",
+    "description": "Benign prostatic hyperplasia without lower urinary tract symptoms",
+    "keywords": ["BPH", "enlarged prostate", "prostatic hyperplasia", "urinary"]
+  },
+  {
+    "code": "N40.1",
+    "description": "Benign prostatic hyperplasia with lower urinary tract symptoms",
+    "keywords": ["BPH", "LUTS", "enlarged prostate", "urinary frequency", "hesitancy"]
+  },
+  {
+    "code": "N20.0",
+    "description": "Calculus of kidney",
+    "keywords": ["kidney stone", "renal calculus", "renal colic", "flank pain"]
+  },
+  {
+    "code": "N20.1",
+    "description": "Calculus of ureter",
+    "keywords": ["ureteral stone", "kidney stone", "renal colic", "passing stone"]
+  },
+  {
+    "code": "N30.00",
+    "description": "Acute cystitis without hematuria",
+    "keywords": ["cystitis", "bladder infection", "UTI", "urinary burning"]
+  },
+  {
+    "code": "N48.10",
+    "description": "Balanitis, unspecified",
+    "keywords": ["balanitis", "penile inflammation", "penile infection"]
+  },
+  {
+    "code": "N92.0",
+    "description": "Excessive and frequent menstruation with regular cycle",
+    "keywords": ["menorrhagia", "heavy periods", "heavy bleeding", "menstrual"]
+  },
+  {
+    "code": "N94.0",
+    "description": "Dysmenorrhea, unspecified",
+    "keywords": ["dysmenorrhea", "painful periods", "menstrual cramps", "period pain"]
+  },
+  {
+    "code": "N93.9",
+    "description": "Abnormal uterine and vaginal bleeding, unspecified",
+    "keywords": ["vaginal bleeding", "abnormal bleeding", "uterine bleeding"]
+  },
+  {
+    "code": "N89.8",
+    "description": "Other specified noninflammatory disorders of vagina",
+    "keywords": ["vaginal disorder", "vaginal dryness", "vaginal discharge"]
+  },
+  {
+    "code": "N50.0",
+    "description": "Atrophy of testis",
+    "keywords": ["testicular atrophy", "small testicles", "hormonal"]
+  },
+  {
+    "code": "N53.12",
+    "description": "Erectile dysfunction",
+    "keywords": ["erectile dysfunction", "impotence", "ED", "sexual dysfunction"]
+  },
+  {
+    "code": "N83.20",
+    "description": "Unspecified ovarian cyst",
+    "keywords": ["ovarian cyst", "pelvic pain", "adnexal mass", "ovary"]
+  },
+  {
+    "code": "F32.1",
+    "description": "Major depressive disorder, single episode, moderate",
+    "keywords": ["depression", "major depressive", "MDD", "low mood", "sadness"]
+  },
+  {
+    "code": "F32.9",
+    "description": "Major depressive disorder, single episode, unspecified",
+    "keywords": ["depression", "depressive disorder", "low mood", "hopelessness"]
+  },
+  {
+    "code": "F33.1",
+    "description": "Major depressive disorder, recurrent, moderate",
+    "keywords": ["recurrent depression", "MDD", "recurring", "episodes"]
+  },
+  {
+    "code": "F41.1",
+    "description": "Generalized anxiety disorder",
+    "keywords": ["anxiety", "GAD", "worry", "nervousness", "anxious"]
+  },
+  {
+    "code": "F41.0",
+    "description": "Panic disorder without agoraphobia",
+    "keywords": ["panic attack", "panic disorder", "anxiety", "palpitations"]
+  },
+  {
+    "code": "F40.10",
+    "description": "Agoraphobia, unspecified",
+    "keywords": ["agoraphobia", "fear of crowds", "fear of open spaces", "phobia"]
+  },
+  {
+    "code": "F40.00",
+    "description": "Phobia, unspecified",
+    "keywords": ["phobia", "fear", "specific phobia", "anxiety"]
+  },
+  {
+    "code": "F42.2",
+    "description": "Obsessive-compulsive disorder, unspecified",
+    "keywords": ["OCD", "obsessive", "compulsive", "repetitive thoughts", "rituals"]
+  },
+  {
+    "code": "F43.10",
+    "description": "Post-traumatic stress disorder, unspecified",
+    "keywords": ["PTSD", "post-traumatic stress", "trauma", "flashbacks"]
+  },
+  {
+    "code": "F43.00",
+    "description": "Acute stress reaction, unspecified",
+    "keywords": ["acute stress", "stress reaction", "crisis", "shock"]
+  },
+  {
+    "code": "F43.21",
+    "description": "Adjustment disorder with depressed mood",
+    "keywords": ["adjustment disorder", "depression", "life change", "transition"]
+  },
+  {
+    "code": "F51.01",
+    "description": "Primary insomnia",
+    "keywords": ["insomnia", "sleep disorder", "difficulty sleeping", "sleeplessness"]
+  },
+  {
+    "code": "F51.02",
+    "description": "Adjustment insomnia",
+    "keywords": ["insomnia", "sleep difficulty", "adjustment", "tension"]
+  },
+  {
+    "code": "F32.A",
+    "description": "Depression, unspecified",
+    "keywords": ["depression", "depressive", "unspecified mood disorder"]
+  },
+  {
+    "code": "F41.9",
+    "description": "Anxiety disorder, unspecified",
+    "keywords": ["anxiety", "anxiety disorder", "nervous", "worry"]
+  },
+  {
+    "code": "F84.0",
+    "description": "Autistic disorder",
+    "keywords": ["autism", "ASD", "autism spectrum", "developmental"]
+  },
+  {
+    "code": "F90.0",
+    "description": "Attention-deficit hyperactivity disorder, predominantly inattentive type",
+    "keywords": ["ADHD", "attention deficit", "inattentive", "focus"]
+  },
+  {
+    "code": "F90.1",
+    "description": "Attention-deficit hyperactivity disorder, predominantly hyperactive type",
+    "keywords": ["ADHD", "hyperactive", "impulsive", "attention deficit"]
+  },
+  {
+    "code": "F90.2",
+    "description": "Attention-deficit hyperactivity disorder, combined type",
+    "keywords": ["ADHD", "combined type", "hyperactive", "inattentive"]
+  },
+  {
+    "code": "F98.9",
+    "description": "Unspecified behavioral and emotional disorders of childhood or adolescence",
+    "keywords": ["childhood disorder", "behavioral", "emotional", "developmental"]
+  },
+  {
+    "code": "F60.3",
+    "description": "Borderline personality disorder",
+    "keywords": ["BPD", "borderline", "personality disorder", "emotional instability"]
+  },
+  {
+    "code": "F10.20",
+    "description": "Alcohol dependence, uncomplicated",
+    "keywords": ["alcohol addiction", "alcohol dependence", "AUD", "alcoholism"]
+  },
+  {
+    "code": "F11.20",
+    "description": "Opioid dependence, uncomplicated",
+    "keywords": ["opioid addiction", "opiate dependence", "narcotic", "substance abuse"]
+  },
+  {
+    "code": "G43.909",
+    "description": "Migraine, unspecified, not intractable, without status migrainosus",
+    "keywords": ["migraine", "headache", "severe headache", "migraine attack"]
+  },
+  {
+    "code": "G43.A1",
+    "description": "Periodic migraine without aura",
+    "keywords": ["migraine without aura", "common migraine", "headache"]
+  },
+  {
+    "code": "G47.00",
+    "description": "Insomnia, unspecified",
+    "keywords": ["insomnia", "sleep disorder", "trouble sleeping", "awakening"]
+  },
+  {
+    "code": "G47.33",
+    "description": "Obstructive sleep apnea",
+    "keywords": ["sleep apnea", "OSA", "snoring", "sleep disorder", "hypoxia"]
+  },
+  {
+    "code": "G40.909",
+    "description": "Epilepsy, unspecified, not intractable, without status epilepticus",
+    "keywords": ["epilepsy", "seizure disorder", "seizures", "convulsions"]
+  },
+  {
+    "code": "G40.001",
+    "description": "Localization-related (focal) (partial) idiopathic epilepsy and epileptic syndromes with seizures of localized onset, not intractable, with status epilepticus",
+    "keywords": ["focal epilepsy", "partial seizure", "seizure", "epilepsy"]
+  },
+  {
+    "code": "G56.00",
+    "description": "Carpal tunnel syndrome, unspecified hand",
+    "keywords": ["carpal tunnel", "hand numbness", "wrist pain", "median nerve"]
+  },
+  {
+    "code": "G57.90",
+    "description": "Mononeuropathy of lower limb, unspecified",
+    "keywords": ["neuropathy", "nerve damage", "leg numbness", "foot pain"]
+  },
+  {
+    "code": "G62.9",
+    "description": "Polyneuropathy, unspecified",
+    "keywords": ["polyneuropathy", "peripheral neuropathy", "numbness", "tingling"]
+  },
+  {
+    "code": "G63",
+    "description": "Polyneuropathy in diseases classified elsewhere",
+    "keywords": ["neuropathy", "nerve disease", "numbness", "weakness"]
+  },
+  {
+    "code": "G43.10",
+    "description": "Migraine with aura, not intractable, without status migrainosus",
+    "keywords": ["migraine with aura", "visual disturbance", "aura", "headache"]
+  },
+  {
+    "code": "G54.0",
+    "description": "Brachial plexus disorders",
+    "keywords": ["brachial plexus", "arm weakness", "nerve injury", "shoulder pain"]
+  },
+  {
+    "code": "G58.9",
+    "description": "Mononeuropathy, unspecified",
+    "keywords": ["mononeuropathy", "single nerve", "nerve injury", "weakness"]
+  },
+  {
+    "code": "G47.10",
+    "description": "Pathological sleepiness, unspecified",
+    "keywords": ["hypersomnia", "excessive sleepiness", "daytime sleep", "drowsy"]
+  },
+  {
+    "code": "G31.84",
+    "description": "Mild cognitive impairment, so stated",
+    "keywords": ["MCI", "cognitive impairment", "memory loss", "early dementia"]
+  },
+  {
+    "code": "G30.9",
+    "description": "Alzheimer disease, unspecified",
+    "keywords": ["Alzheimer", "dementia", "memory loss", "neurodegenerative"]
+  },
+  {
+    "code": "G20",
+    "description": "Parkinson disease",
+    "keywords": ["Parkinson", "tremor", "rigidity", "bradykinesia", "movement disorder"]
+  },
+  {
+    "code": "G56.01",
+    "description": "Carpal tunnel syndrome, right hand",
+    "keywords": ["carpal tunnel", "right hand", "numbness", "wrist"]
+  },
+  {
+    "code": "G56.02",
+    "description": "Carpal tunnel syndrome, left hand",
+    "keywords": ["carpal tunnel", "left hand", "numbness", "wrist"]
+  },
+  {
+    "code": "C34.90",
+    "description": "Malignant neoplasm of unspecified part of unspecified bronchus or lung",
+    "keywords": ["lung cancer", "bronchogenic", "pulmonary malignancy", "respiratory"]
+  },
+  {
+    "code": "C50.919",
+    "description": "Malignant neoplasm of unspecified site of unspecified breast",
+    "keywords": ["breast cancer", "mammary carcinoma", "breast malignancy"]
+  },
+  {
+    "code": "C50.911",
+    "description": "Malignant neoplasm of unspecified site of right breast",
+    "keywords": ["breast cancer", "right breast", "malignancy"]
+  },
+  {
+    "code": "C50.912",
+    "description": "Malignant neoplasm of unspecified site of left breast",
+    "keywords": ["breast cancer", "left breast", "malignancy"]
+  },
+  {
+    "code": "C61",
+    "description": "Malignant neoplasm of prostate",
+    "keywords": ["prostate cancer", "prostatic carcinoma", "PSA"]
+  },
+  {
+    "code": "C34.10",
+    "description": "Malignant neoplasm of unspecified part of upper lobe, right bronchus or lung",
+    "keywords": ["lung cancer", "upper lobe", "right lung", "malignancy"]
+  },
+  {
+    "code": "C18.9",
+    "description": "Malignant neoplasm of colon, unspecified",
+    "keywords": ["colon cancer", "colorectal", "intestinal malignancy"]
+  },
+  {
+    "code": "C16.9",
+    "description": "Malignant neoplasm of stomach, unspecified",
+    "keywords": ["stomach cancer", "gastric cancer", "gastric malignancy"]
+  },
+  {
+    "code": "C20",
+    "description": "Malignant neoplasm of rectum",
+    "keywords": ["rectal cancer", "rectum cancer", "colorectal malignancy"]
+  },
+  {
+    "code": "C25.9",
+    "description": "Malignant neoplasm of pancreas, unspecified",
+    "keywords": ["pancreatic cancer", "pancreatic malignancy", "pancreas"]
+  },
+  {
+    "code": "C56.9",
+    "description": "Malignant neoplasm of unspecified ovary",
+    "keywords": ["ovarian cancer", "ovarian malignancy", "ovary"]
+  },
+  {
+    "code": "C53.9",
+    "description": "Malignant neoplasm of unspecified part of cervix uteri",
+    "keywords": ["cervical cancer", "cervix cancer", "HPV"]
+  },
+  {
+    "code": "C54.1",
+    "description": "Malignant neoplasm of endometrium",
+    "keywords": ["uterine cancer", "endometrial cancer", "gynecological"]
+  },
+  {
+    "code": "C73",
+    "description": "Malignant neoplasm of thyroid gland",
+    "keywords": ["thyroid cancer", "thyroid malignancy", "thyroid nodule"]
+  },
+  {
+    "code": "C43.9",
+    "description": "Malignant melanoma of unspecified part of skin",
+    "keywords": ["melanoma", "skin cancer", "malignant melanoma", "lesion"]
+  },
+  {
+    "code": "D10.1",
+    "description": "Benign neoplasm of base of tongue",
+    "keywords": ["tongue lesion", "benign tumor", "oral mass"]
+  },
+  {
+    "code": "D12.6",
+    "description": "Benign neoplasm of unspecified part of colon",
+    "keywords": ["colon polyp", "benign polyp", "intestinal polyp"]
+  },
+  {
+    "code": "D44.9",
+    "description": "Neoplasm of unspecified behavior of unspecified endocrine gland",
+    "keywords": ["endocrine tumor", "uncertain behavior", "gland"]
+  },
+  {
+    "code": "D48.5",
+    "description": "Neoplasm of unspecified behavior of skin",
+    "keywords": ["skin neoplasm", "uncertain behavior", "skin lesion", "skin growth"]
+  },
+  {
+    "code": "C71.9",
+    "description": "Malignant neoplasm of brain, unspecified",
+    "keywords": ["brain cancer", "brain tumor", "glioma", "intracranial"]
+  },
+  {
+    "code": "C64.1",
+    "description": "Malignant neoplasm of kidney, except renal pelvis",
+    "keywords": ["kidney cancer", "renal cell carcinoma", "renal malignancy"]
+  },
+  {
+    "code": "C67.9",
+    "description": "Malignant neoplasm of bladder, unspecified",
+    "keywords": ["bladder cancer", "bladder malignancy", "urothelial"]
+  },
+  {
+    "code": "C72.9",
+    "description": "Malignant neoplasm of central nervous system, unspecified",
+    "keywords": ["CNS cancer", "brain and spinal cord", "neural malignancy"]
+  },
+  {
+    "code": "C90.00",
+    "description": "Multiple myeloma not having achieved remission",
+    "keywords": ["myeloma", "multiple myeloma", "bone marrow cancer", "plasma cell"]
+  },
+  {
+    "code": "C91.10",
+    "description": "Chronic lymphocytic leukemia of B-cell type not having achieved remission",
+    "keywords": ["CLL", "chronic lymphocytic leukemia", "leukemia", "lymphocyte"]
+  },
+  {
+    "code": "D50.9",
+    "description": "Iron deficiency anemia, unspecified",
+    "keywords": ["anemia", "iron deficiency", "low hemoglobin", "fatigue", "pallor"]
+  },
+  {
+    "code": "D64.9",
+    "description": "Anemia, unspecified",
+    "keywords": ["anemia", "low blood count", "fatigue", "weakness"]
+  },
+  {
+    "code": "D62",
+    "description": "Acute posthemorrhagic anemia",
+    "keywords": ["post-hemorrhagic anemia", "blood loss", "bleeding", "acute anemia"]
+  },
+  {
+    "code": "D69.59",
+    "description": "Secondary thrombocytopenia",
+    "keywords": ["low platelets", "thrombocytopenia", "bleeding", "bruising"]
+  },
+  {
+    "code": "D69.6",
+    "description": "Thrombocytopenia, unspecified",
+    "keywords": ["thrombocytopenia", "low platelets", "platelet count"]
+  },
+  {
+    "code": "D72.810",
+    "description": "Decreased white blood cell count",
+    "keywords": ["leukopenia", "low white cells", "low WBC", "infection risk"]
+  },
+  {
+    "code": "D72.829",
+    "description": "Elevated white blood cell count, unspecified",
+    "keywords": ["leukocytosis", "high white cells", "high WBC", "infection"]
+  },
+  {
+    "code": "R00.0",
+    "description": "Tachycardia, unspecified",
+    "keywords": ["palpitations", "rapid heartbeat", "racing heart", "tachycardia"]
+  },
+  {
+    "code": "R07.9",
+    "description": "Chest pain, unspecified",
+    "keywords": ["chest pain", "chest discomfort", "angina", "heart pain"]
+  },
+  {
+    "code": "R07.89",
+    "description": "Other chest pain",
+    "keywords": ["chest pain", "chest discomfort", "thoracic pain"]
+  },
+  {
+    "code": "R05",
+    "description": "Cough",
+    "keywords": ["cough", "coughing", "dry cough", "productive cough"]
+  },
+  {
+    "code": "R05.9",
+    "description": "Cough, unspecified",
+    "keywords": ["cough", "unspecified cough", "coughing"]
+  },
+  {
+    "code": "R06.02",
+    "description": "Shortness of breath",
+    "keywords": ["dyspnea", "breathlessness", "SOB", "difficulty breathing"]
+  },
+  {
+    "code": "R06.00",
+    "description": "Dyspnea, unspecified",
+    "keywords": ["dyspnea", "breathing difficulty", "short of breath"]
+  },
+  {
+    "code": "R51",
+    "description": "Headache",
+    "keywords": ["headache", "head pain", "cephalalgia", "head discomfort"]
+  },
+  {
+    "code": "R50.9",
+    "description": "Fever, unspecified",
+    "keywords": ["fever", "pyrexia", "temperature", "febrile"]
+  },
+  {
+    "code": "R50.83",
+    "description": "Fever, presenting with conditions classified elsewhere",
+    "keywords": ["fever", "pyrexia", "infection", "temperature"]
+  },
+  {
+    "code": "R42",
+    "description": "Dizziness and giddiness",
+    "keywords": ["dizziness", "vertigo", "giddiness", "lightheaded"]
+  },
+  {
+    "code": "R11.10",
+    "description": "Vomiting, unspecified",
+    "keywords": ["vomiting", "nausea", "emesis", "throwing up"]
+  },
+  {
+    "code": "R11.0",
+    "description": "Nausea",
+    "keywords": ["nausea", "feeling sick", "queasy", "upset stomach"]
+  },
+  {
+    "code": "R10.9",
+    "description": "Unspecified abdominal pain",
+    "keywords": ["abdominal pain", "stomach pain", "belly pain", "tummy ache"]
+  },
+  {
+    "code": "R10.30",
+    "description": "Pain localized to lower abdomen, unspecified",
+    "keywords": ["lower abdominal pain", "pelvic pain", "lower belly"]
+  },
+  {
+    "code": "R10.40",
+    "description": "Other and unspecified abdominal pain",
+    "keywords": ["abdominal pain", "stomach ache", "abdominal cramps"]
+  },
+  {
+    "code": "R53.83",
+    "description": "Other fatigue",
+    "keywords": ["fatigue", "tiredness", "exhaustion", "low energy", "malaise"]
+  },
+  {
+    "code": "R53.1",
+    "description": "Weakness",
+    "keywords": ["weakness", "generalized weakness", "asthenia", "feeble"]
+  },
+  {
+    "code": "R53.81",
+    "description": "Other malaise",
+    "keywords": ["malaise", "feeling unwell", "general discomfort"]
+  },
+  {
+    "code": "R52",
+    "description": "Pain, unspecified",
+    "keywords": ["pain", "unspecified pain", "general pain", "chronic pain"]
+  },
+  {
+    "code": "R10.0",
+    "description": "Acute abdomen",
+    "keywords": ["acute abdomen", "surgical abdomen", "severe pain", "emergency"]
+  },
+  {
+    "code": "R06.82",
+    "description": "Hyperventilation",
+    "keywords": ["hyperventilation", "rapid breathing", "over-breathing", "anxiety"]
+  },
+  {
+    "code": "R01.1",
+    "description": "Cardiac murmur, unspecified",
+    "keywords": ["heart murmur", "cardiac murmur", "abnormal heart sound"]
+  },
+  {
+    "code": "R03.0",
+    "description": "Abnormal blood-pressure reading, without diagnosis",
+    "keywords": ["elevated BP", "blood pressure", "abnormal reading", "pre-hypertension"]
+  },
+  {
+    "code": "R04.0",
+    "description": "Hemorrhage from nose",
+    "keywords": ["nosebleed", "epistaxis", "nasal bleeding", "blood from nose"]
+  },
+  {
+    "code": "R56.0",
+    "description": "Convulsions, not elsewhere classified",
+    "keywords": ["convulsions", "seizure", "fit", "spasm"]
+  },
+  {
+    "code": "R45.851",
+    "description": "Feelings of distress",
+    "keywords": ["emotional distress", "distress", "mental anguish"]
+  },
+  {
+    "code": "R45.850",
+    "description": "Suicidal ideation",
+    "keywords": ["suicidal ideation", "self-harm thoughts", "suicide risk", "psychiatric"]
+  },
+  {
+    "code": "R45.83",
+    "description": "Emotional lability",
+    "keywords": ["emotional instability", "mood swings", "lability", "irritable"]
+  },
+  {
+    "code": "R63.0",
+    "description": "Anorexia",
+    "keywords": ["anorexia", "loss of appetite", "poor appetite", "not eating"]
+  },
+  {
+    "code": "R63.4",
+    "description": "Abnormal weight loss",
+    "keywords": ["weight loss", "unintended weight loss", "wasting", "losing weight"]
+  },
+  {
+    "code": "R63.5",
+    "description": "Abnormal weight gain",
+    "keywords": ["weight gain", "unintended weight gain", "gaining weight", "obesity"]
+  },
+  {
+    "code": "R68.83",
+    "description": "Chronic fatigue",
+    "keywords": ["chronic fatigue", "CFS", "persistent tiredness", "exhaustion"]
+  },
+  {
+    "code": "R68.89",
+    "description": "Other general symptoms and signs",
+    "keywords": ["general symptoms", "unspecified symptom", "nonspecific"]
+  },
+  {
+    "code": "R60.9",
+    "description": "Edema, unspecified",
+    "keywords": ["edema", "swelling", "fluid retention", "water retention"]
+  },
+  {
+    "code": "R60.0",
+    "description": "Localized edema",
+    "keywords": ["localized swelling", "edema", "localized fluid", "swelling"]
+  },
+  {
+    "code": "R60.1",
+    "description": "Generalized edema",
+    "keywords": ["generalized edema", "whole body swelling", "fluid overload"]
+  },
+  {
+    "code": "R19.7",
+    "description": "Diarrhea",
+    "keywords": ["diarrhea", "loose stools", "watery stools", "frequent bowel"]
+  },
+  {
+    "code": "R17",
+    "description": "Unspecified jaundice",
+    "keywords": ["jaundice", "yellow skin", "icterus", "liver", "yellow eyes"]
+  },
+  {
+    "code": "R76.8",
+    "description": "Other specified abnormalities of immunological status",
+    "keywords": ["immune abnormality", "immunology", "autoimmune markers"]
+  },
+  {
+    "code": "R73.03",
+    "description": "Prediabetes",
+    "keywords": ["prediabetes", "pre-diabetes", "impaired glucose", "borderline diabetes"]
+  },
+  {
+    "code": "R74.8",
+    "description": "Abnormal levels of other serum enzymes",
+    "keywords": ["elevated enzymes", "liver enzymes", "abnormal labs"]
+  },
+  {
+    "code": "R77.8",
+    "description": "Other specified abnormalities of plasma proteins",
+    "keywords": ["abnormal protein", "serum protein", "protein abnormality"]
+  },
+  {
+    "code": "R79.89",
+    "description": "Other specified chemical findings",
+    "keywords": ["chemical abnormality", "blood chemistry", "lab finding"]
+  },
+  {
+    "code": "R71.01",
+    "description": "Marked anisocytosis",
+    "keywords": ["anisocytosis", "RBC variation", "red cell size"]
+  },
+  {
+    "code": "R71.02",
+    "description": "Marked poikilocytosis",
+    "keywords": ["poikilocytosis", "abnormal RBC shape", "blood smear"]
+  },
+  {
+    "code": "R76.0",
+    "description": "Raised antibody to human immunodeficiency virus",
+    "keywords": ["HIV positive", "raised antibody", "HIV test", "serology"]
+  },
+  {
+    "code": "R94.2",
+    "description": "Abnormal results of function studies of brain",
+    "keywords": ["abnormal EEG", "brain function study", "neurological"]
+  }
+]
