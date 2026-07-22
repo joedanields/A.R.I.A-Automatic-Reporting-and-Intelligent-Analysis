@@ -25,6 +25,7 @@ from services.icd_retriever import ICD10Retriever  # noqa: F401
 from agents.scribe import scribe_node  # noqa: F401
 from agents.coder import coder_node  # noqa: F401
 from agents.auditor import auditor_node  # noqa: F401
+from agents.validator import validator_node  # noqa: F401
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +37,7 @@ logger = logging.getLogger(__name__)
 def create_graph() -> StateGraph:
     """Create the LangGraph workflow.
 
-    Flow: Scribe -> Coder -> Auditor -> END
+    Flow: Scribe -> Coder -> Auditor -> Validator -> END
     """
     workflow = StateGraph(AgentState)
 
@@ -44,12 +45,14 @@ def create_graph() -> StateGraph:
     workflow.add_node("scribe", scribe_node)
     workflow.add_node("coder", coder_node)
     workflow.add_node("auditor", auditor_node)
+    workflow.add_node("validator", validator_node)
 
     # Define edges
     workflow.set_entry_point("scribe")
     workflow.add_edge("scribe", "coder")
     workflow.add_edge("coder", "auditor")
-    workflow.add_edge("auditor", END)
+    workflow.add_edge("auditor", "validator")
+    workflow.add_edge("validator", END)
 
     return workflow.compile()
 
@@ -76,6 +79,7 @@ def process_transcript(transcript: str) -> AgentState:
         "agent_thoughts": [],
         "current_agent": "",
         "provenance_tags": [],
+        "validation": {},
     }
 
     result = graph.invoke(initial_state)
@@ -90,7 +94,7 @@ async def process_transcript_streaming(transcript: str):
     """Process transcript with streaming updates for real-time UI.
 
     Yields:
-        dict: {"type": "thought"|"soap"|"codes"|"provenance"|"complete", "data": ...}
+        dict: {"type": "thought"|"soap"|"codes"|"provenance"|"validation"|"complete", "data": ...}
     """
     graph = create_graph()
 
@@ -105,6 +109,7 @@ async def process_transcript_streaming(transcript: str):
         "agent_thoughts": [],
         "current_agent": "",
         "provenance_tags": [],
+        "validation": {},
     }
 
     # Stream through nodes
@@ -124,5 +129,9 @@ async def process_transcript_streaming(transcript: str):
                 # F1: Stream provenance tags
                 if "provenance_tags" in node_output and node_output["provenance_tags"]:
                     yield {"type": "provenance", "data": node_output["provenance_tags"]}
+
+                # F3: Stream validation results
+                if "validation" in node_output and node_output["validation"]:
+                    yield {"type": "validation", "data": node_output["validation"]}
 
     yield {"type": "complete", "data": "Processing complete"}

@@ -37,3 +37,6 @@ class AgentState(TypedDict):
 
     # F1: Provenance — every clinical field tagged with source
     provenance_tags: Annotated[list[dict], add]  # Accumulates across nodes
+
+    # F3: Validation — anti-hallucination check results
+    validation: dict
