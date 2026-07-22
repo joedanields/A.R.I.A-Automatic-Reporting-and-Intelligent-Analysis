@@ -20,6 +20,7 @@ from services.transcriber import get_transcriber, TranscriptSegment
 from services.vocab_corrector import get_corrector
 from services.drug_corrector import get_drug_corrector
 from services.procedure_suggester import get_procedure_suggester
+from services.record_store import get_record_store
 from agent_graph import process_transcript_streaming, process_transcript
 
 # =============================================================================
@@ -473,6 +474,115 @@ async def suggest_procedures(request: TranscriptRequest):
         "success": True,
         "suggestions": results,
     })
+
+
+# =============================================================================
+# Encrypted Record Store (F15)
+# =============================================================================
+
+class RecordSaveRequest(BaseModel):
+    transcript: str
+    soap_note: dict
+    icd_codes: list[dict] = []
+    procedure_codes: list[dict] = []
+    patient_id: str | None = None
+    abha_id: str | None = None
+    fhir_compliant: bool = False
+
+
+@app.post("/api/records")
+async def save_record(request: RecordSaveRequest):
+    """Save a consultation record (encrypted at rest)."""
+    try:
+        store = get_record_store()
+        result = store.save(
+            transcript=request.transcript,
+            soap_note=request.soap_note,
+            icd_codes=request.icd_codes,
+            procedure_codes=request.procedure_codes,
+            patient_id=request.patient_id,
+            abha_id=request.abha_id,
+            fhir_compliant=request.fhir_compliant,
+        )
+        return JSONResponse({"success": True, "record": result})
+    except Exception as e:
+        logger.error(f"Record save error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/records")
+async def list_records(
+    patient_id: str | None = None,
+    abha_id: str | None = None,
+    limit: int = 50,
+    offset: int = 0,
+):
+    """List consultation records (metadata only)."""
+    try:
+        store = get_record_store()
+        records = store.list_records(
+            patient_id=patient_id,
+            abha_id=abha_id,
+            limit=limit,
+            offset=offset,
+        )
+        total = store.count(patient_id=patient_id)
+        return JSONResponse({
+            "success": True,
+            "total": total,
+            "records": records,
+        })
+    except Exception as e:
+        logger.error(f"Record list error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/records/{record_id}")
+async def get_record(record_id: str):
+    """Retrieve and decrypt a record by ID."""
+    try:
+        store = get_record_store()
+        record = store.get(record_id)
+        if not record:
+            raise HTTPException(status_code=404, detail="Record not found")
+        return JSONResponse({"success": True, "record": record})
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Record retrieval error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete("/api/records/{record_id}")
+async def delete_record(record_id: str):
+    """Delete a record by ID."""
+    try:
+        store = get_record_store()
+        deleted = store.delete(record_id)
+        if not deleted:
+            raise HTTPException(status_code=404, detail="Record not found")
+        return JSONResponse({"success": True, "message": f"Record {record_id[:8]}... deleted"})
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Record deletion error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/records/{record_id}/export")
+async def export_record(record_id: str):
+    """Export a record as FHIR-like JSON."""
+    try:
+        store = get_record_store()
+        exported = store.export_record(record_id)
+        if not exported:
+            raise HTTPException(status_code=404, detail="Record not found")
+        return JSONResponse({"success": True, "export": exported})
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Record export error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
