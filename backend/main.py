@@ -22,6 +22,7 @@ from services.drug_corrector import get_drug_corrector
 from services.procedure_suggester import get_procedure_suggester
 from services.record_store import get_record_store
 from services.patient_context import load_patient_context, get_patient_history_list
+from services.learning_store import get_learning_store
 from agent_graph import process_transcript_streaming, process_transcript
 
 # =============================================================================
@@ -631,8 +632,87 @@ async def get_patient_context(patient_id: str):
 
 
 # =============================================================================
-# Vocabulary Management (F7)
+# Correction-as-Learning Loop (F4)
 # =============================================================================
+
+class CorrectionRequest(BaseModel):
+    correction_type: str  # transcript, code, entity, drug
+    original: str
+    corrected: str
+    context: str = ""
+    entity_type: str = ""
+
+
+@app.post("/api/learn/corrections")
+async def add_learned_correction(request: CorrectionRequest):
+    """Record a doctor correction for future learning."""
+    try:
+        store = get_learning_store()
+        result = store.add_correction(
+            correction_type=request.correction_type,
+            original=request.original,
+            corrected=request.corrected,
+            context=request.context,
+            entity_type=request.entity_type,
+        )
+        return JSONResponse({"success": True, "correction": result})
+    except Exception as e:
+        logger.error(f"Learning correction error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/learn/corrections")
+async def list_learned_corrections(
+    correction_type: str | None = None,
+    limit: int = 100,
+):
+    """List learned corrections."""
+    try:
+        store = get_learning_store()
+        corrections = store.get_corrections(
+            correction_type=correction_type,
+            limit=limit,
+        )
+        return JSONResponse({
+            "success": True,
+            "total": store.count(correction_type=correction_type),
+            "corrections": corrections,
+        })
+    except Exception as e:
+        logger.error(f"Learning list error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/learn/apply")
+async def apply_learned_corrections(request: TranscriptRequest):
+    """Apply learned corrections to text (preview)."""
+    try:
+        store = get_learning_store()
+        corrected, applied = store.apply_corrections(request.text)
+        return JSONResponse({
+            "success": True,
+            "original": request.text,
+            "corrected": corrected,
+            "applied": applied,
+        })
+    except Exception as e:
+        logger.error(f"Learning apply error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete("/api/learn/corrections")
+async def clear_learned_corrections(correction_type: str | None = None):
+    """Clear learned corrections."""
+    try:
+        store = get_learning_store()
+        count = store.clear_corrections(correction_type=correction_type)
+        return JSONResponse({
+            "success": True,
+            "deleted": count,
+        })
+    except Exception as e:
+        logger.error(f"Learning clear error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/api/vocab")
 async def get_vocab():
