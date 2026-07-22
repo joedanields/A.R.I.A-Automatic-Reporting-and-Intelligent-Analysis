@@ -14,6 +14,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from state import AgentState
 from llm import get_llm
 from data_loader import load_slang_dictionary
+from provenance import tag_entity, HEARD, INFERRED
 
 logger = logging.getLogger(__name__)
 
@@ -21,10 +22,26 @@ logger = logging.getLogger(__name__)
 SLANG_DICT = load_slang_dictionary()
 
 
+def _tag_entities(entities: list[dict], transcript: str) -> tuple[list[dict], list[dict]]:
+    """Tag all entities with provenance and source spans.
+
+    Returns:
+        (tagged_entities, provenance_tags)
+    """
+    tagged = []
+    tags = []
+    for entity in entities:
+        updated, tag = tag_entity(entity, transcript)
+        tagged.append(updated)
+        tags.append(tag)
+    return tagged, tags
+
+
 def scribe_node(state: AgentState) -> AgentState:
     """Scribe Agent: Sanitize transcript and normalize medical slang.
 
     Handles Indian/American medical terminology and extracts entities.
+    Every entity gets a provenance tag and source_span.
     """
     logger.info("Scribe Agent: Processing transcript")
 
@@ -66,13 +83,19 @@ Respond in JSON format:
     try:
         response = llm.invoke(messages)
         result = json.loads(response.content)
+        raw_entities = result.get("medical_entities", [])
+
+        # F1: Tag entities with provenance
+        tagged_entities, provenance_tags = _tag_entities(raw_entities, transcript)
 
         return {
             **state,
             "normalized_transcript": result.get("normalized_transcript", transcript),
-            "medical_entities": result.get("medical_entities", []),
+            "medical_entities": tagged_entities,
+            "provenance_tags": provenance_tags,
             "agent_thoughts": [
-                f"Scribe: Normalized {len(result.get('medical_entities', []))} medical terms"
+                f"Scribe: Normalized {len(tagged_entities)} medical terms "
+                f"({sum(1 for t in provenance_tags if t['provenance'] == 'heard')} grounded)"
             ],
             "current_agent": "scribe",
         }
@@ -87,6 +110,7 @@ Respond in JSON format:
             **state,
             "normalized_transcript": normalized,
             "medical_entities": [],
+            "provenance_tags": [],
             "agent_thoughts": ["Scribe: Applied basic normalization (LLM unavailable)"],
             "current_agent": "scribe",
         }

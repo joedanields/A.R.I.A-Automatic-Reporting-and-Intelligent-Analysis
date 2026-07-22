@@ -15,12 +15,38 @@ from langchain_core.messages import HumanMessage, SystemMessage
 
 from state import AgentState
 from llm import get_llm
+from provenance import INFERRED, HEARD, make_provenance_tag, find_source_span
 
 logger = logging.getLogger(__name__)
 
 
+def _tag_soap_section(
+    section: dict,
+    transcript: str,
+    *,
+    default_provenance: str = INFERRED,
+) -> dict:
+    """Add provenance to a SOAP section.
+
+    If the section text contains phrases found in the transcript, mark as HEARD.
+    Otherwise, mark as INFERRED (LLM-generated).
+    """
+    text = section.get("text", "")
+    span = find_source_span(text[:100], transcript)  # Check first 100 chars
+    provenance = HEARD if span else default_provenance
+
+    updated = {**section, "provenance": provenance}
+    if span:
+        updated["source_span"] = span
+    return updated
+
+
 def auditor_node(state: AgentState) -> AgentState:
-    """Auditor Agent: Check FHIR/ABDM compliance and generate SOAP note."""
+    """Auditor Agent: Check FHIR/ABDM compliance and generate SOAP note.
+
+    Propagates provenance from entities/codes to SOAP sections.
+    Anything the LLM writes without a transcript match is marked 'inferred'.
+    """
     logger.info("Auditor Agent: Checking compliance")
 
     llm = get_llm()
@@ -37,6 +63,7 @@ def auditor_node(state: AgentState) -> AgentState:
     entities = state.get("medical_entities", [])
     icd_codes = state.get("icd_codes", [])
     transcript = state.get("normalized_transcript", state["transcript"])
+    raw_transcript = state["transcript"]
 
     missing: list[str] = []
     if not any(e.get("type") == "symptom" for e in entities):
@@ -92,6 +119,24 @@ Generate a compliant SOAP note.
             if section.get("title") == "Assessment":
                 section["codes"] = icd_codes
 
+        # F1: Tag each section with provenance
+        provenance_tags = []
+        for section in soap_note.get("section", []):
+            title = section.get("title", "")
+            section = _tag_soap_section(section, raw_transcript)
+            # Update in-place
+            for i, s in enumerate(soap_note["section"]):
+                if s.get("title") == title:
+                    soap_note["section"][i] = section
+                    break
+
+            provenance_tags.append(make_provenance_tag(
+                field=f"soap:{title}",
+                value=section.get("text", "")[:100],
+                provenance=section.get("provenance", INFERRED),
+                source_span=section.get("source_span"),
+            ))
+
         fhir_compliant = len(missing) == 0
 
         return {
@@ -99,8 +144,10 @@ Generate a compliant SOAP note.
             "soap_note": soap_note,
             "missing_info_flags": missing,
             "fhir_compliant": fhir_compliant,
+            "provenance_tags": provenance_tags,
             "agent_thoughts": [
-                f"Auditor: FHIR compliance {'PASSED' if fhir_compliant else 'FAILED - missing: ' + ', '.join(missing)}"
+                f"Auditor: FHIR compliance {'PASSED' if fhir_compliant else 'FAILED - missing: ' + ', '.join(missing)}",
+                f"Auditor: Tagged {len(provenance_tags)} SOAP sections with provenance",
             ],
             "current_agent": "auditor",
         }
@@ -195,13 +242,26 @@ Generate a compliant SOAP note.
             ],
         }
 
+        # F1: Tag fallback sections with provenance
+        provenance_tags = []
+        for section in soap_note["section"]:
+            section = _tag_soap_section(section, raw_transcript)
+            provenance_tags.append(make_provenance_tag(
+                field=f"soap:{section.get('title', '')}",
+                value=section.get("text", "")[:100],
+                provenance=section.get("provenance", INFERRED),
+                source_span=section.get("source_span"),
+            ))
+
         return {
             **state,
             "soap_note": soap_note,
             "missing_info_flags": missing,
             "fhir_compliant": len(icd_codes) > 0,
+            "provenance_tags": provenance_tags,
             "agent_thoughts": [
-                "Auditor: Generated detailed SOAP from transcript analysis"
+                "Auditor: Generated detailed SOAP from transcript analysis",
+                f"Auditor: Tagged {len(provenance_tags)} SOAP sections with provenance",
             ],
             "current_agent": "auditor",
         }

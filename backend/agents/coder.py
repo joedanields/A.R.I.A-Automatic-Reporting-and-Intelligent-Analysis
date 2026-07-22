@@ -6,6 +6,7 @@ Extracted from agent_graph.py into its own module.
 
 from __future__ import annotations
 
+import json
 import logging
 
 from langchain_core.messages import HumanMessage, SystemMessage
@@ -13,19 +14,24 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from state import AgentState
 from llm import get_llm
 from services.icd_retriever import ICD10Retriever
+from provenance import tag_code, RETRIEVED
 
 logger = logging.getLogger(__name__)
 
 
 def coder_node(state: AgentState) -> AgentState:
-    """Coder Agent: Query ChromaDB for ICD-10 codes based on medical entities."""
+    """Coder Agent: Query ChromaDB for ICD-10 codes based on medical entities.
+
+    Every code gets a provenance tag (retrieved from RAG) and source_span.
+    """
     logger.info("Coder Agent: Finding ICD-10 codes")
 
     retriever = ICD10Retriever()
     llm = get_llm()
 
     entities = state.get("medical_entities", [])
-    normalized_text = state.get("normalized_transcript", state["transcript"])
+    transcript = state["transcript"]
+    normalized_text = state.get("normalized_transcript", transcript)
 
     # Query RAG for each condition/symptom
     all_codes: list[dict] = []
@@ -75,19 +81,37 @@ Respond in JSON format:
         result = json.loads(response.content)
         selected = result.get("selected_codes", unique_codes[:3])
 
+        # F1: Tag codes with provenance
+        tagged_codes = []
+        provenance_tags = []
+        for code in selected:
+            updated, tag = tag_code(code, transcript, provenance=RETRIEVED)
+            tagged_codes.append(updated)
+            provenance_tags.append(tag)
+
         return {
             **state,
-            "icd_codes": selected,
-            "agent_thoughts": [f"Coder: Assigned {len(selected)} ICD-10 codes"],
+            "icd_codes": tagged_codes,
+            "provenance_tags": provenance_tags,
+            "agent_thoughts": [f"Coder: Assigned {len(tagged_codes)} ICD-10 codes (all retrieved)"],
             "current_agent": "coder",
         }
     except Exception as e:
         logger.error(f"Coder agent error: {e}")
+        # Fallback: tag the RAG results directly
+        tagged_codes = []
+        provenance_tags = []
+        for code in unique_codes[:3]:
+            updated, tag = tag_code(code, transcript, provenance=RETRIEVED)
+            tagged_codes.append(updated)
+            provenance_tags.append(tag)
+
         return {
             **state,
-            "icd_codes": unique_codes[:3],
+            "icd_codes": tagged_codes,
+            "provenance_tags": provenance_tags,
             "agent_thoughts": [
-                f"Coder: Retrieved {len(unique_codes[:3])} codes from RAG"
+                f"Coder: Retrieved {len(tagged_codes)} codes from RAG (LLM unavailable)"
             ],
             "current_agent": "coder",
         }

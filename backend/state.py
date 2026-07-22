@@ -34,3 +34,6 @@ class AgentState(TypedDict):
     # Workflow Metadata
     agent_thoughts: Annotated[list[str], add]  # Accumulates across nodes
     current_agent: str
+
+    # F1: Provenance — every clinical field tagged with source
+    provenance_tags: Annotated[list[dict], add]  # Accumulates across nodes

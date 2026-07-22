@@ -75,6 +75,7 @@ def process_transcript(transcript: str) -> AgentState:
         "soap_note": {},
         "agent_thoughts": [],
         "current_agent": "",
+        "provenance_tags": [],
     }
 
     result = graph.invoke(initial_state)
@@ -89,7 +90,7 @@ async def process_transcript_streaming(transcript: str):
     """Process transcript with streaming updates for real-time UI.
 
     Yields:
-        dict: {"type": "thought"|"soap"|"complete", "data": ...}
+        dict: {"type": "thought"|"soap"|"codes"|"provenance"|"complete", "data": ...}
     """
     graph = create_graph()
 
@@ -103,6 +104,7 @@ async def process_transcript_streaming(transcript: str):
         "soap_note": {},
         "agent_thoughts": [],
         "current_agent": "",
+        "provenance_tags": [],
     }
 
     # Stream through nodes
@@ -118,5 +120,9 @@ async def process_transcript_streaming(transcript: str):
 
                 if "icd_codes" in node_output:
                     yield {"type": "codes", "data": node_output["icd_codes"]}
+
+                # F1: Stream provenance tags
+                if "provenance_tags" in node_output and node_output["provenance_tags"]:
+                    yield {"type": "provenance", "data": node_output["provenance_tags"]}
 
     yield {"type": "complete", "data": "Processing complete"}
