@@ -17,6 +17,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 from services.transcriber import get_transcriber, TranscriptSegment
+from services.vocab_corrector import get_corrector
 from agent_graph import process_transcript_streaming, process_transcript
 
 # =============================================================================
@@ -407,6 +408,65 @@ async def eval_history():
         })
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# =============================================================================
+# Vocabulary Management (F7)
+# =============================================================================
+
+@app.get("/api/vocab")
+async def get_vocab():
+    """Get current clinic vocabulary (hotwords and corrections)."""
+    try:
+        corrector = get_corrector()
+        return JSONResponse({
+            "success": True,
+            "categories": corrector.list_categories(),
+            "hotwords": {
+                cat: corrector.get_hotwords(cat)
+                for cat in corrector.list_categories()
+            },
+            "corrections": corrector._corrections,
+        })
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/vocab/hotwords")
+async def get_hotwords(category: str | None = None):
+    """Get hotwords, optionally filtered by category."""
+    corrector = get_corrector()
+    return JSONResponse({
+        "success": True,
+        "hotwords": corrector.get_hotwords(category),
+    })
+
+
+@app.post("/api/vocab/correct")
+async def correct_text(request: TranscriptRequest):
+    """Apply vocabulary corrections to text."""
+    corrector = get_corrector()
+    result = corrector.correct(request.text)
+    return JSONResponse({
+        "success": True,
+        **result,
+    })
+
+
+class CorrectionRequest(BaseModel):
+    misspelling: str
+    correct: str
+
+
+@app.post("/api/vocab/corrections")
+async def add_correction(request: CorrectionRequest):
+    """Add a new correction mapping."""
+    corrector = get_corrector()
+    corrector.add_correction(request.misspelling, request.correct)
+    return JSONResponse({
+        "success": True,
+        "message": f"Added correction: {request.misspelling} -> {request.correct}",
+    })
 
 
 # =============================================================================

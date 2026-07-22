@@ -107,37 +107,45 @@ class Transcriber:
     def transcribe_audio_chunk(
         self,
         audio_bytes: bytes,
-        language: str = "en"
+        language: str = "en",
+        initial_prompt: str | None = None,
     ) -> Generator[TranscriptSegment, None, None]:
         """
         Transcribe audio bytes and yield segments with timestamps.
-        
+
         Args:
             audio_bytes: Raw audio data (WAV format preferred)
             language: Language code (default: English)
-        
+            initial_prompt: Optional prompt to bias Whisper toward medical vocabulary
+
         Yields:
             TranscriptSegment with text, start, end, and confidence
         """
         self.load_model()
-        
+
         if Transcriber._model is None:
             logger.error("Model not loaded")
             return
-        
+
         try:
             # Create a file-like object from bytes
             audio_file = io.BytesIO(audio_bytes)
-            
+
+            transcribe_kwargs = {
+                "language": language,
+                "beam_size": 5,
+                "vad_filter": True,
+                "vad_parameters": {
+                    "min_silence_duration_ms": 500,
+                    "speech_pad_ms": 200,
+                },
+            }
+            if initial_prompt:
+                transcribe_kwargs["initial_prompt"] = initial_prompt
+
             segments, info = Transcriber._model.transcribe(
                 audio_file,
-                language=language,
-                beam_size=5,
-                vad_filter=True,  # Voice Activity Detection
-                vad_parameters={
-                    "min_silence_duration_ms": 500,
-                    "speech_pad_ms": 200
-                }
+                **transcribe_kwargs,
             )
             
             logger.info(f"Detected language: {info.language} (prob: {info.language_probability:.2f})")
