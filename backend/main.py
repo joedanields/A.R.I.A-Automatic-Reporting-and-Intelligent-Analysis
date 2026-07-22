@@ -18,6 +18,7 @@ from pydantic import BaseModel
 
 from services.transcriber import get_transcriber, TranscriptSegment
 from services.vocab_corrector import get_corrector
+from services.drug_corrector import get_drug_corrector
 from agent_graph import process_transcript_streaming, process_transcript
 
 # =============================================================================
@@ -466,6 +467,60 @@ async def add_correction(request: CorrectionRequest):
     return JSONResponse({
         "success": True,
         "message": f"Added correction: {request.misspelling} -> {request.correct}",
+    })
+
+
+# =============================================================================
+# Drug Name Correction (F8)
+# =============================================================================
+
+@app.get("/api/drugs")
+async def get_drugs():
+    """Get drug database info (categories and counts)."""
+    corrector = get_drug_corrector()
+    return JSONResponse({
+        "success": True,
+        "total_drugs": len(corrector._drug_names),
+        "categories": corrector.list_categories(),
+        "category_counts": {
+            cat: len(drugs)
+            for cat, drugs in corrector._drug_categories.items()
+        },
+    })
+
+
+@app.get("/api/drugs/search")
+async def search_drugs(q: str):
+    """Search drugs by name (fuzzy)."""
+    corrector = get_drug_corrector()
+    results = corrector.search_drugs(q)
+    return JSONResponse({
+        "success": True,
+        "query": q,
+        "results": results,
+    })
+
+
+@app.get("/api/drugs/{category}")
+async def get_drugs_by_category(category: str):
+    """Get drugs in a specific category."""
+    corrector = get_drug_corrector()
+    drugs = corrector.get_drugs_in_category(category)
+    return JSONResponse({
+        "success": True,
+        "category": category,
+        "drugs": drugs,
+    })
+
+
+@app.post("/api/drugs/correct")
+async def correct_drug_names(request: TranscriptRequest):
+    """Apply drug-name corrections to text."""
+    corrector = get_drug_corrector()
+    result = corrector.correct(request.text)
+    return JSONResponse({
+        "success": True,
+        **result,
     })
 
 
