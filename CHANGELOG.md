@@ -4,45 +4,77 @@ All notable changes to A.R.I.A. (Automatic Reporting and Intelligent Analysis) w
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [0.3.0] - 2026-07-23
+## [0.4.0] - 2026-07-23
 
 ### Added
-- **F1: Provenance Tagging** — Every entity, ICD code, and SOAP section tagged with source:
-  - `heard` (patient said), `retrieved` (RAG lookup), `inferred` (LLM generated)
-  - `provenance.py` with `find_source_span()`, `tag_entity()`, `tag_code()`
-  - Scribe tags entities, Coder tags codes, Auditor propagates to SOAP
-  - UI renders colored badges per item
-- **F2: Click-to-Source** — Click SOAP sentence/code to highlight transcript span
-  - Shared types in `frontend/src/types/shared.ts`
-  - SoapNote sections clickable with `onSpanClick` prop
-  - LiveTranscript accepts `highlightSpan` prop, auto-scrolls
-- **F3: Anti-Hallucination Validator** — Rule-based post-generation verification
-  - `agents/validator.py` checks ungrounded numbers, vitals, entities, codes
-  - Graph updated: `scribe → coder → auditor → validator → END`
-  - Validation results streamed in WebSocket events
-- **F9: Full ICD-10 DB + Medical Embeddings** — 254 codes with sentence-transformers
-  - `MedicalEmbeddingFunction` using `all-MiniLM-L6-v2` (CPU-only)
-  - Auto-rebuilds ChromaDB on embedder or count mismatch
-  - 15 clinical query tests validate retrieval accuracy
-- **F13: Evaluation Dashboard** — Real metrics: WER, entity F1, code accuracy, SOAP similarity
-  - `services/eval_harness.py` with `EvalHarness` class
-  - `/api/eval` and `/api/eval/history` endpoints
-  - `EvalDashboard.tsx` with run button, metrics cards, case results
-  - Gold test case for diabetes follow-up scenario
-- **F7: Custom Vocabulary / Phrase Boosting** — Per-clinic hotword registry
-  - `data/clinic_vocab.json` with 21 drug brands, 25 generic names, 15 conditions
-  - `services/vocab_corrector.py` with fuzzy matching (rapidfuzz)
-  - Transcriber accepts `initial_prompt` for medical vocabulary biasing
-  - `/api/vocab` endpoints for hotword management
-- **F8: Drug-Name Correction Layer** — 90+ drugs with context-aware correction
-  - `data/drug_names.json` with 18 drug categories, 60+ misspellings
-  - `services/drug_corrector.py` with context-aware fuzzy matching
-  - Drug search, category listing, and correction endpoints
+- **F11: ICD-11 Multi-System Support** — ICD-11 alongside ICD-10
+  - `data/icd11_sample.json` with 20 ICD-11 codes
+  - `CodeRefers` multi-system retriever with `collections` dict
+  - Backward-compatible `ICD10Retriever` alias
+  - Auto-rebuild on embedder/count mismatch
+  - 28 retriever tests (274 total codes across systems)
+
+- **F12: Billing/Procedure Code Suggestion** — Suggests procedure codes from encounter
+  - `data/procedure_codes.json` with 55 codes (consultation, diagnostic, lab, procedure, surgical)
+  - `services/procedure_suggester.py` with condition-to-category mapping
+  - All suggestions flagged "suggested — verify" (never auto-final)
+  - Integrates into coder agent and auditor SOAP Plan section
+  - REST: `/api/procedures`, `/api/procedures/search`, `/api/procedures/suggest`
+  - 20 procedure suggester tests
+
+- **F15: Encrypted Persistent Records + ABHA Linking** — Encrypted at-rest storage
+  - `services/record_store.py` with Fernet encryption (AES-128-CBC)
+  - SQLite with WAL mode, indexed by patient_id/abha_id
+  - Key from env `ARIA_RECORD_KEY`, `.record_key` file, or auto-generated
+  - CRUD: save, get, list (paginated), delete, count, FHIR Bundle export
+  - REST: `/api/records` (full CRUD + export)
+  - 23 record store tests
+
+- **F16: Longitudinal Patient Context** — Prior visit history in current note
+  - `services/patient_context.py` loads prior visits from encrypted store
+  - Builds concise context summary (SOAP sections + ICD codes)
+  - Injected into auditor prompt for longitudinal Assessment/Plan
+  - REST: `/api/patients/{id}/history`, `/api/patients/{id}/context`
+  - 12 patient context tests
+
+- **F4: Correction-as-Learning Loop** — Doctor corrections improve future output
+  - `services/learning_store.py` with encrypted SQLite for corrections
+  - Types: transcript, code, entity, drug
+  - Scribe applies learned corrections before LLM normalization
+  - Few-shot examples injected into LLM prompts
+  - REST: `/api/learn/corrections` (CRUD), `/api/learn/apply` (preview)
+  - 20 learning store tests
+
+- **F19: Adaptive Model Selection by Hardware** — Auto-picks model tier
+  - `services/model_selector.py` detects VRAM via torch.cuda/pynvml
+  - Three tiers: tiny (<2GB CPU), baseline (2-6GB GTX1650), large (≥6GB)
+  - Auto-selects Whisper model size, compute type, LLM context window
+  - `ARIA_MODEL_PROFILE` env var override
+  - LLM factory uses hardware-adaptive config
+  - 20 model selector tests
+
+- **F20: Patient-Facing Summary in Regional Language** — Plain-language visit summary
+  - `services/patient_summary.py` generates simplified summaries from SOAP
+  - 7 languages: English, Hindi, Tamil, Telugu, Kannada, Marathi, Bengali
+  - LLM-powered with rule-based fallback
+  - REST: `/api/summary/generate`, `/api/summary/languages`
+  - 15 patient summary tests
+
+- **F18: Auth, Roles & Audit Logging** — Multi-doctor accounts + tamper-evident log
+  - `services/auth.py`: PBKDF2-HMAC-SHA256 password hashing, HMAC-signed tokens
+  - RBAC: doctor (level 1), admin (level 2)
+  - `services/audit.py`: append-only hash-chained audit trail (SHA-256)
+  - Chain verification detects any tampering
+  - REST: `/api/auth/login`, `/api/auth/users`, `/api/audit`, `/api/audit/verify`
+  - 31 auth/audit tests
 
 ### Changed
 - Graph flow: `scribe → coder → auditor → validator → END`
-- Transcriber now accepts `initial_prompt` parameter
-- 145/145 tests passing (up from 47)
+- Coder now suggests procedure codes alongside ICD-10/11
+- Auditor includes procedure codes in SOAP Plan and patient context in prompts
+- Scribe applies learned corrections before normalization
+- LLM uses hardware-adaptive configuration from ModelSelector
+- 306/306 tests passing (up from 145)
 
 ## [0.2.0] - 2026-07-22
 
