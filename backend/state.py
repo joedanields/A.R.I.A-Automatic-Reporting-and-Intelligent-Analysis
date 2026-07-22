@@ -35,6 +35,9 @@ class AgentState(TypedDict):
     # F16: Longitudinal patient context (prior visit summaries)
     patient_context: str
 
+    # F20: Patient-facing summary in regional language
+    patient_summary: str
+
     # Workflow Metadata
     agent_thoughts: Annotated[list[str], add]  # Accumulates across nodes
     current_agent: str

@@ -92,6 +92,7 @@ def process_transcript(
         "provenance_tags": [],
         "validation": {},
         "patient_context": patient_context,
+        "patient_summary": "",
     }
 
     result = graph.invoke(initial_state)
@@ -136,6 +137,7 @@ async def process_transcript_streaming(
         "provenance_tags": [],
         "validation": {},
         "patient_context": patient_context,
+        "patient_summary": "",
     }
 
     # Stream through nodes

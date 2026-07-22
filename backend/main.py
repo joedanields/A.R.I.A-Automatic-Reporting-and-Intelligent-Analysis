@@ -23,6 +23,7 @@ from services.procedure_suggester import get_procedure_suggester
 from services.record_store import get_record_store
 from services.patient_context import load_patient_context, get_patient_history_list
 from services.learning_store import get_learning_store
+from services.patient_summary import generate_patient_summary, get_supported_languages
 from agent_graph import process_transcript_streaming, process_transcript
 
 # =============================================================================
@@ -714,7 +715,41 @@ async def clear_learned_corrections(correction_type: str | None = None):
         logger.error(f"Learning clear error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/api/vocab")
+
+# =============================================================================
+# Patient-Facing Summary (F20)
+# =============================================================================
+
+class SummaryRequest(BaseModel):
+    soap_note: dict
+    language: str = "en"
+
+
+@app.get("/api/summary/languages")
+async def get_summary_languages():
+    """Get supported languages for patient summaries."""
+    return JSONResponse({
+        "success": True,
+        "languages": get_supported_languages(),
+    })
+
+
+@app.post("/api/summary/generate")
+async def generate_summary(request: SummaryRequest):
+    """Generate a plain-language patient summary from a SOAP note."""
+    try:
+        summary = generate_patient_summary(
+            soap_note=request.soap_note,
+            language=request.language,
+        )
+        return JSONResponse({
+            "success": True,
+            "language": request.language,
+            "summary": summary,
+        })
+    except Exception as e:
+        logger.error(f"Summary generation error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 async def get_vocab():
     """Get current clinic vocabulary (hotwords and corrections)."""
     try:
