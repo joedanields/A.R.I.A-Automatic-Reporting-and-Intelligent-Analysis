@@ -47,3 +47,6 @@ class AgentState(TypedDict):
 
     # F3: Validation — anti-hallucination check results
     validation: dict
+
+    # F10: Drug interaction warnings
+    drug_interactions: list[dict]

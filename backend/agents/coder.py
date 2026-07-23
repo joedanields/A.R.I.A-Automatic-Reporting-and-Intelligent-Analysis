@@ -2,6 +2,7 @@
 
 Queries ChromaDB for ICD-10 codes based on medical entities.
 Suggests billing/procedure codes based on encounter (F12).
+Cross-references medications for drug interactions (F10).
 Extracted from agent_graph.py into its own module.
 """
 
@@ -16,6 +17,7 @@ from state import AgentState
 from llm import get_llm
 from services.icd_retriever import ICD10Retriever
 from services.procedure_suggester import get_procedure_suggester
+from services.interaction_checker import get_interaction_checker
 from provenance import tag_code, RETRIEVED
 
 logger = logging.getLogger(__name__)
@@ -99,15 +101,36 @@ Respond in JSON format:
             n_results=5,
         )
 
+        # F10: Check drug interactions
+        drug_names = [
+            e.get("normalized", e.get("original", ""))
+            for e in entities
+            if e.get("type") == "medication"
+        ]
+        interaction_warnings: list[dict] = []
+        if len(drug_names) >= 2:
+            checker = get_interaction_checker()
+            interaction_result = checker.check(drug_names)
+            interaction_warnings = interaction_result.get("warnings", [])
+
+        thoughts = [
+            f"Coder: Assigned {len(tagged_codes)} ICD-10 codes (all retrieved)",
+            f"Coder: Suggested {len(procedure_suggestions)} procedure codes (verify with physician)",
+        ]
+        if interaction_warnings:
+            major = sum(1 for w in interaction_warnings if w["level"] == "Major")
+            thoughts.append(
+                f"Coder: Found {len(interaction_warnings)} drug interaction(s) "
+                f"({major} major — alert physician)"
+            )
+
         return {
             **state,
             "icd_codes": tagged_codes,
             "procedure_codes": procedure_suggestions,
+            "drug_interactions": interaction_warnings,
             "provenance_tags": provenance_tags,
-            "agent_thoughts": [
-                f"Coder: Assigned {len(tagged_codes)} ICD-10 codes (all retrieved)",
-                f"Coder: Suggested {len(procedure_suggestions)} procedure codes (verify with physician)",
-            ],
+            "agent_thoughts": thoughts,
             "current_agent": "coder",
         }
     except Exception as e:
@@ -128,10 +151,26 @@ Respond in JSON format:
             n_results=5,
         )
 
+        # F10: Check drug interactions even in fallback
+        drug_names = [
+            e.get("normalized", e.get("original", ""))
+            for e in entities
+            if e.get("type") == "medication"
+        ]
+        interaction_warnings: list[dict] = []
+        if len(drug_names) >= 2:
+            try:
+                checker = get_interaction_checker()
+                interaction_result = checker.check(drug_names)
+                interaction_warnings = interaction_result.get("warnings", [])
+            except Exception as ie:
+                logger.error(f"Interaction check error in fallback: {ie}")
+
         return {
             **state,
             "icd_codes": tagged_codes,
             "procedure_codes": procedure_suggestions,
+            "drug_interactions": interaction_warnings,
             "provenance_tags": provenance_tags,
             "agent_thoughts": [
                 f"Coder: Retrieved {len(tagged_codes)} codes from RAG (LLM unavailable)",
