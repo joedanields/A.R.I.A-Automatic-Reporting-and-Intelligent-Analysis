@@ -207,3 +207,11 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# A.R.I.A. specific
+*.db
+.record_key
+backend/chroma_db/
+backend/models/
+*.tar.bz2
+*.tar.gz
