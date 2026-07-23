@@ -28,6 +28,7 @@ from services.auth import get_auth_service
 from services.audit import get_audit_log
 from services.interaction_checker import get_interaction_checker
 from services.diarization import get_diarization_service
+from services.ocr_service import get_ocr_service
 from agent_graph import process_transcript_streaming, process_transcript
 
 # =============================================================================
@@ -1134,6 +1135,44 @@ async def diarization_info():
         "success": True,
         **service.get_model_info(),
     })
+
+
+# =============================================================================
+# OCR — Prescription/Lab Intake (F17)
+# =============================================================================
+
+@app.get("/api/ocr")
+async def ocr_info():
+    """Get OCR service status."""
+    service = get_ocr_service()
+    return JSONResponse({
+        "success": True,
+        **service.get_info(),
+    })
+
+
+@app.post("/api/ocr/scan")
+async def ocr_scan(request: TranscriptRequest):
+    """Scan an image for medical text (base64-encoded or URL).
+
+    For now, accepts text input as a proxy. Full image upload
+    can be added via multipart form data.
+    """
+    try:
+        service = get_ocr_service()
+        import base64
+        image_bytes = base64.b64decode(request.text) if request.text else b""
+        result = service.scan_image(image_bytes)
+        return JSONResponse({
+            "success": True,
+            "raw_text": result.raw_text,
+            "confidence": result.confidence,
+            "lines": result.lines,
+            "extracted_values": result.extracted_values,
+        })
+    except Exception as e:
+        logger.error(f"OCR scan error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # =============================================================================
