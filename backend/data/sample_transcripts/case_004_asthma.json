@@ -1,0 +1,31 @@
+{
+  "id": "sample_004",
+  "description": "Pediatric asthma exacerbation — mother as informant",
+  "language": "en",
+  "transcript": "Doctor: Hi there! And how is this little one doing?\nMother: Doctor, he's been coughing a lot at night. And his breathing sounds wheezy.\nDoctor: How long has this been going on?\nMother: Since about a week. It started after he got a cold.\nDoctor: Does he have a history of asthma or wheezing?\nMother: Yes, doctor. He was diagnosed with asthma when he was 3. He's 6 now.\nDoctor: Is he on any regular inhaler?\nMother: He uses Salbutamol inhaler when he gets breathless. But we don't use it regularly.\nDoctor: What about a preventer inhaler? Budesonide?\nMother: The previous doctor had given one, but we stopped it because he seemed fine.\nDoctor: I see. That's actually why he's having these frequent episodes. The preventer needs to be used daily to keep the inflammation down. Let me listen to his chest.\nDoctor: Hmm, I can hear bilateral wheezing, more on the right side. His respiratory rate is a bit elevated — about 24 breaths per minute. No chest retractions though, which is good.\nMother: Is it serious, doctor?\nDoctor: It's moderate. Not an emergency, but we need to act quickly. I'll start him on Budesonide 200mcg inhaler, one puff twice a day through a spacer. And Salbutamol 2 puffs every 4 hours if he's wheezy.\nMother: A spacer? What is that?\nDoctor: It's a tube that attaches to the inhaler. It helps the medicine reach his lungs properly instead of just hitting the back of his throat. Much more effective for children.\nMother: Oh, okay. Where do I get that?\nDoctor: Any medical shop will have it. I'll also give him a short course of Prednisolone syrup — 15mg once daily for 5 days — to bring down the acute inflammation.\nMother: Any side effects of the steroid, doctor?\nDoctor: Short courses are safe. He might be a bit hyper or have trouble sleeping. Give the syrup in the morning.\nMother: Alright, doctor.\nDoctor: Keep him away from dust, smoke, and pets if possible. Make sure the house is well-ventilated. And please, use the preventer inhaler every day — don't stop it even when he feels better.\nMother: I understand now, doctor. I'll be more careful this time.\nDoctor: Follow up in 2 weeks. If he has severe breathing difficulty, blue lips, or can't speak in full sentences, go to the emergency room immediately.\nMother: Thank you so much, doctor.",
+  "expected": {
+    "entities": [
+      {"text": "coughing", "type": "symptom", "source": "heard"},
+      {"text": "wheezy", "type": "symptom", "source": "heard"},
+      {"text": "asthma", "type": "condition", "source": "heard"},
+      {"text": "Salbutamol", "type": "medication", "source": "heard"},
+      {"text": "Budesonide", "type": "medication", "source": "heard"},
+      {"text": "bilateral wheezing", "type": "vital", "source": "inferred"},
+      {"text": "24 breaths per minute", "type": "vital_value", "source": "heard"},
+      {"text": "Budesonide 200mcg", "type": "medication", "source": "heard"},
+      {"text": "Salbutamol 2 puffs every 4 hours", "type": "medication", "source": "heard"},
+      {"text": "Prednisolone syrup 15mg", "type": "medication", "source": "heard"},
+      {"text": "spacer", "type": "device", "source": "heard"}
+    ],
+    "codes": [
+      {"code": "J45.909", "description": "Unspecified asthma, uncomplicated", "source": "inferred"},
+      {"code": "J06.9", "description": "Acute upper respiratory infection, unspecified", "source": "inferred"}
+    ],
+    "soap": {
+      "subjective": "6-year-old male with known asthma (diagnosed age 3) presenting with nocturnal cough and wheezing for 1 week post-upper respiratory infection. Currently using Salbutamol PRN only. Preventer inhaler (Budesonide) was discontinued by parents.",
+      "objective": "RR 24/min (mildly elevated for age). Bilateral expiratory wheezing, right > left. No chest retractions. No cyanosis. Comfortable in between coughs.",
+      "assessment": "Moderate asthma exacerbation precipitated by URI. Poorly controlled due to non-compliance with preventer therapy.",
+      "plan": "1. Budesonide 200mcg MDI via spacer, 1 puff BD. 2. Salbutamol 2 puffs Q4H PRN wheeze. 3. Prednisolone syrup 15mg OD x 5 days. 4. Educate mother on daily preventer use. 5. Environmental triggers avoidance. 6. Follow-up 2 weeks. 7. Emergency: increasing work of breathing, cyanosis, inability to speak in sentences."
+    }
+  }
+}

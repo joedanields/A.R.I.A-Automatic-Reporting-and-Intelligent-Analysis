@@ -425,7 +425,6 @@ async def eval_history():
     """Get historical evaluation results."""
     try:
         from services.eval_harness import EvalHarness, RESULTS_DIR
-        import os
 
         harness = EvalHarness()
         results = []
@@ -448,10 +447,13 @@ async def eval_history():
                 except Exception as e:
                     logger.error(f"Failed to load {result_file}: {e}")
 
-    return JSONResponse({
-        "success": True,
-        **result,
-    })
+        return JSONResponse({
+            "success": True,
+            "history": results,
+        })
+    except Exception as e:
+        logger.error(f"Eval history error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # =============================================================================
@@ -964,6 +966,7 @@ async def verify_audit_chain():
 
 
 @app.get("/api/vocab")
+async def get_vocab():
     """Get current clinic vocabulary (hotwords and corrections)."""
     try:
         corrector = get_corrector()
@@ -1001,13 +1004,13 @@ async def correct_text(request: TranscriptRequest):
     })
 
 
-class CorrectionRequest(BaseModel):
+class VocabCorrectionRequest(BaseModel):
     misspelling: str
     correct: str
 
 
 @app.post("/api/vocab/corrections")
-async def add_correction(request: CorrectionRequest):
+async def add_correction(request: VocabCorrectionRequest):
     """Add a new correction mapping."""
     corrector = get_corrector()
     corrector.add_correction(request.misspelling, request.correct)

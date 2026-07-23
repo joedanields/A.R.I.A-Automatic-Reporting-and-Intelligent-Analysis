@@ -1,0 +1,28 @@
+Doctor: Hello, what brings you in today?
+Patient: Doctor, I've been having a burning sensation when I pass urine since the last two days. And I need to go very frequently.
+Doctor: Any fever?
+Patient: Yes, slight fever. Around 99.5.
+Doctor: Any back pain or pain in the sides?
+Patient: No, just the lower abdomen feels heavy and uncomfortable.
+Doctor: Any blood in the urine?
+Patient: No, thankfully.
+Doctor: When was your last menstrual period?
+Patient: About two weeks ago.
+Doctor: Are you sexually active?
+Patient: Yes.
+Doctor: Any vaginal discharge or itching?
+Patient: No, nothing like that.
+Doctor: Alright. It sounds like a urinary tract infection, possibly a lower UTI or cystitis. Have you had this before?
+Patient: Yes, once about a year ago.
+Doctor: Last time, what antibiotic were you given?
+Patient: I think it was some tablet for 3 days. I don't remember the name.
+Doctor: Okay. I'll prescribe Nitrofurantoin 100mg twice a day for 5 days. Take it with food to avoid stomach upset.
+Patient: Okay, doctor.
+Doctor: Drink plenty of water — at least 2 to 3 litres a day. This helps flush out the bacteria.
+Patient: Should I avoid anything?
+Doctor: Avoid caffeine and alcohol for now. And urinate after intercourse — that helps prevent recurrence.
+Patient: Alright.
+Doctor: If you develop fever above 101, back pain, or see blood in urine, come in immediately. That could mean the infection has moved up to the kidneys.
+Patient: Got it, doctor. Thank you.
+Doctor: If symptoms don't improve in 2 days, come back and we'll do a urine culture and switch the antibiotic.
+Patient: Thank you, doctor.

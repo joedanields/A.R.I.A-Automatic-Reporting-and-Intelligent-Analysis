@@ -1,0 +1,28 @@
+{
+  "id": "sample_002",
+  "description": "Uncontrolled hypertension with code-switching (English/Hindi)",
+  "language": "mixed",
+  "transcript": "Doctor: Namaste. Kaise hain aap?\nPatient: Doctor saab, theek hain. Lekin sar dard rehta hai subah se.\nDoctor: Sar dard? Kahan hota hai? Front ya back?\nPatient: Dono taraf hota hai, doctor. Kabhi kabhi bahut zyada ho jata hai.\nDoctor: Kya aap dawai le rahe hain BP ki?\nPatient: Haan, Amlodipine 5mg roz raat ko leta hoon.\nDoctor: Aur BP kitna aata hai ghar pe?\nPatient: Subah 150/95 hota hai. Shaam ko thoda kam, 140/90.\nDoctor: Yeh bahut high hai. Humko 130 se neeche lana hai. Aapki dawai ka dose kam pad raha hai.\nPatient: Kya dose badhana padega, doctor?\nDoctor: Haan. Main Amlodipine 5mg ko 10mg kar deta hoon. Aur ek aur dawai add karta hoon, Telmisartan 40mg.\nPatient: Telmisartan? Yeh kya hai?\nDoctor: Yeh ek ARB hai, bahut achhi dawai hai BP ke liye. Isse aapko sar dard bhi kam hoga.\nPatient: Koi side effect toh nahi hoga?\nDoctor: Kabhi kabhi chakkar aa sakte hain pehle kuch din. Agar ho toh mujhe batana. Aur roz subah khali pet BP check karo aur likho.\nPatient: Theek hai, doctor.\nDoctor: Aur ek baat, namak kam khao. Aap kitna namak lete ho roz?\nPatient: Doctor, mujhe namak bahut pasand hai. Chutney bhi bahut khata hoon.\nDoctor: Yeh sab chhodna padega. High BP aur namak ka bahut relation hai. Kam se kam aadha namak karo pehle.\nPatient: Theek hai, doctor. Koshish karunga.\nDoctor: Aur exercise karte ho?\nPatient: Nahi, doctor. Baith ke kaam karta hoon, office mein.\nDoctor: Roz 20 minute walk karo. Bahut zaroori hai. Agar BP control nahi hota, hum aur dawai dalenge.\nPatient: Done, doctor. Thank you.\nDoctor: 3 hafta baad follow-up aana hai. Saath mein blood reports bhi le aana.\nPatient: Haan ji, thank you doctor saab.",
+  "expected": {
+    "entities": [
+      {"text": "sar dard", "type": "symptom", "source": "heard"},
+      {"text": "Amlodipine 5mg", "type": "medication", "source": "heard"},
+      {"text": "150/95", "type": "vital_value", "source": "heard"},
+      {"text": "140/90", "type": "vital_value", "source": "heard"},
+      {"text": "Amlodipine 10mg", "type": "medication", "source": "heard"},
+      {"text": "Telmisartan 40mg", "type": "medication", "source": "heard"},
+      {"text": "chakkar", "type": "symptom", "source": "heard"},
+      {"text": "namak", "type": "risk_factor", "source": "heard"}
+    ],
+    "codes": [
+      {"code": "I10", "description": "Essential (primary) hypertension", "source": "inferred"},
+      {"code": "R51", "description": "Headache", "source": "inferred"}
+    ],
+    "soap": {
+      "subjective": "Patient presents with headache since morning. Currently on Amlodipine 5mg nocte. Home BP readings: AM 150/95, PM 140/90. Reports high salt intake and sedentary lifestyle.",
+      "objective": "BP readings consistently elevated above target (130/80). No target organ damage symptoms reported.",
+      "assessment": "Uncontrolled essential hypertension on current monotherapy. Inadequate BP control with Amlodipine 5mg.",
+      "plan": "1. Up-titrate Amlodipine to 10mg. 2. Add Telmisartan 40mg. 3. Dietary salt restriction. 4. Daily 20-min walk. 5. Home BP monitoring daily AM. 6. Follow-up in 3 weeks with blood reports."
+    }
+  }
+}

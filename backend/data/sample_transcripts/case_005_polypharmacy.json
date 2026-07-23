@@ -1,0 +1,39 @@
+{
+  "id": "sample_005",
+  "description": "Elderly polypharmacy with orthostatic hypotension and drug deprescribing",
+  "language": "en",
+  "transcript": "Doctor: Good afternoon, Mr. Sharma. How are you feeling?\nPatient: Not great, doctor. I feel dizzy when I stand up. And my stomach has been upset.\nDoctor: When you say dizzy, is it when you first stand up from sitting or lying down?\nPatient: Yes, exactly. When I get up in the morning or from the sofa, everything goes black for a second.\nDoctor: That sounds like orthostatic hypotension. It could be from your blood pressure medications. Let me review what you're currently taking.\nPatient: I have the list here. Amlodipine 10mg, Metoprolol 50mg, Losartan 50mg, Aspirin 75mg, Atorvastatin 20mg, Metformin 500mg twice, Omeprazole 20mg, and that calcium tablet.\nDoctor: That's 8 medications. And your blood pressure at home?\nPatient: It's been around 105/60. Sometimes even 95/55.\nDoctor: That's too low, especially with all these antihypertensives. We're overtreating your BP. I'm going to simplify your regimen. I'll stop the Losartan and reduce the Amlodipine to 5mg.\nPatient: Won't my BP go up?\nDoctor: With 105/60, we have room to reduce. And the dizziness is a bigger risk for you — if you fall and fracture a hip at your age, that's very serious.\nPatient: That's true. I'm 72 after all.\nDoctor: Now about the stomach upset — the Omeprazole you're taking can actually cause long-term issues. How long have you been on it?\nPatient: Over a year now. The previous doctor started it for acidity.\nDoctor: We should try to wean off it. Long-term PPI use can affect calcium absorption and increase fracture risk. I'll reduce it to 10mg and try to stop it in a month.\nPatient: Okay, doctor.\nDoctor: Also, check your blood sugar regularly. With the Metformin and the reduced food intake you mentioned, we want to make sure you're not going too low.\nPatient: My fasting sugar was 98 last week.\nDoctor: That's good. Actually, since your sugar is well controlled, we can even consider reducing Metformin to 500mg once a day.\nPatient: Really? That would be nice.\nDoctor: Yes. Let me also check — are you taking any herbal supplements or over-the-counter medicines?\nPatient: My wife buys some ayurvedic tablets. I take those sometimes for joint pain.\nDoctor: What are they? Do you know the name?\nPatient: I think it's some Ashwagandha and something else. I don't remember.\nDoctor: Please bring the bottle next time. Some herbals can interact with your medications. For example, Ashwagandha can lower blood pressure further, which would make your dizziness worse.\nPatient: Oh, I didn't know that. I'll stop taking them until I bring them.\nDoctor: Good. So to summarize — stop Losartan, reduce Amlodipine to 5mg, reduce Metformin to once daily, taper Omeprazole. Check BP daily for the next 2 weeks. And bring those ayurvedic tablets.\nPatient: Thank you, doctor. You've really simplified things for me.\nDoctor: That's the goal. Fewer medicines, better quality of life. Come back in 2 weeks.\nPatient: Will do. Thank you.",
+  "expected": {
+    "entities": [
+      {"text": "dizzy", "type": "symptom", "source": "heard"},
+      {"text": "Amlodipine 10mg", "type": "medication", "source": "heard"},
+      {"text": "Metoprolol 50mg", "type": "medication", "source": "heard"},
+      {"text": "Losartan 50mg", "type": "medication", "source": "heard"},
+      {"text": "Aspirin 75mg", "type": "medication", "source": "heard"},
+      {"text": "Atorvastatin 20mg", "type": "medication", "source": "heard"},
+      {"text": "Metformin 500mg twice", "type": "medication", "source": "heard"},
+      {"text": "Omeprazole 20mg", "type": "medication", "source": "heard"},
+      {"text": "105/60", "type": "vital_value", "source": "heard"},
+      {"text": "95/55", "type": "vital_value", "source": "heard"},
+      {"text": "orthostatic hypotension", "type": "condition", "source": "inferred"},
+      {"text": "Amlodipine 5mg", "type": "medication", "source": "heard"},
+      {"text": "Losartan", "type": "medication", "source": "heard"},
+      {"text": "Metformin 500mg once", "type": "medication", "source": "heard"},
+      {"text": "Omeprazole 10mg", "type": "medication", "source": "heard"},
+      {"text": "Ashwagandha", "type": "medication", "source": "heard"},
+      {"text": "98", "type": "vital_value", "source": "heard"}
+    ],
+    "codes": [
+      {"code": "I95.1", "description": "Orthostatic hypotension", "source": "inferred"},
+      {"code": "I10", "description": "Essential (primary) hypertension", "source": "inferred"},
+      {"code": "E11.9", "description": "Type 2 diabetes mellitus without complications", "source": "inferred"},
+      {"code": "Z79.899", "description": "Other long term current drug therapy", "source": "inferred"}
+    ],
+    "soap": {
+      "subjective": "72-year-old male with 8-drug regimen presents with orthostatic dizziness and stomach upset. Home BP 105/60 to 95/55. Fasting sugar 98 mg/dL. Also taking unverified ayurvedic supplements for joint pain.",
+      "objective": "BP likely low for current regimen. 8 concurrent medications including 3 antihypertensives. Well-controlled diabetes (FBG 98).",
+      "assessment": "1. Orthostatic hypotension secondary to polypharmacy (overtreatment with antihypertensives). 2. Type 2 diabetes mellitus, well controlled. 3. Potential herb-drug interaction risk (Ashwagandha + antihypertensives). 4. Long-term PPI use requiring deprescribing.",
+      "plan": "1. Stop Losartan 50mg. 2. Reduce Amlodipine 10mg to 5mg. 3. Reduce Metformin 500mg BD to 500mg OD. 4. Taper Omeprazole 20mg to 10mg, aim to stop in 1 month. 5. Bring ayurvedic bottles for review. 6. Daily home BP monitoring x 2 weeks. 7. Follow-up in 2 weeks."
+    }
+  }
+}

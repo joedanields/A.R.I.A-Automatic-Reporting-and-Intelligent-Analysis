@@ -1,0 +1,32 @@
+{
+  "id": "sample_001",
+  "description": "Type 2 diabetes follow-up with early neuropathy",
+  "language": "en",
+  "transcript": "Doctor: Good morning. How are you feeling today?\nPatient: Good morning, doctor. I'm okay, but I've been feeling a bit tired lately.\nDoctor: I see. Let's go through your numbers. What's your fasting sugar been like?\nPatient: It's around 140 in the mornings. Sometimes 150.\nDoctor: And after meals?\nPatient: After lunch it goes up to about 190, 200 sometimes.\nDoctor: Alright. Are you taking your Metformin regularly?\nPatient: Yes, I take 500mg twice a day, with breakfast and dinner.\nDoctor: Good. Any nausea or stomach upset?\nPatient: No, no problems with that.\nDoctor: Have you checked your HbA1c recently?\nPatient: I did the blood test last week. The lab said it was 8.2.\nDoctor: Okay, 8.2 is a bit higher than we'd like. Ideally we want it below 7. Any blurring of vision or numbness in your feet?\nPatient: No blurring. But sometimes my feet feel a little tingly at night.\nDoctor: That could be early neuropathy. We should keep a close eye on that. Let me increase your Metformin to 500mg three times a day, and I'll also start you on a Vitamin B12 supplement since long-term Metformin can deplete it.\nPatient: Okay, doctor.\nDoctor: I'd also like you to walk for at least 30 minutes a day. Even a 15-minute walk after each meal helps.\nPatient: I'll try. I used to walk in the morning but got lazy.\nDoctor: It's important, especially with the neuropathy symptoms. Also, keep a food diary this month. Cut down on rice and maida.\nPatient: Alright, doctor. Thank you.\nDoctor: Come back in 4 weeks. We'll recheck your sugars and see if the dose change helps. If the tingling gets worse, come in sooner.\nPatient: Thank you, doctor.",
+  "expected": {
+    "entities": [
+      {"text": "tired", "type": "symptom", "source": "heard"},
+      {"text": "140", "type": "vital_value", "source": "heard"},
+      {"text": "fasting sugar", "type": "vital", "source": "heard"},
+      {"text": "190, 200", "type": "vital_value", "source": "heard"},
+      {"text": "Metformin", "type": "medication", "source": "heard"},
+      {"text": "500mg twice a day", "type": "dosage", "source": "heard"},
+      {"text": "HbA1c", "type": "vital", "source": "heard"},
+      {"text": "8.2", "type": "vital_value", "source": "heard"},
+      {"text": "tingly", "type": "symptom", "source": "heard"},
+      {"text": "neuropathy", "type": "condition", "source": "inferred"},
+      {"text": "Metformin 500mg three times a day", "type": "medication", "source": "heard"},
+      {"text": "Vitamin B12", "type": "medication", "source": "heard"}
+    ],
+    "codes": [
+      {"code": "E11.9", "description": "Type 2 diabetes mellitus without complications", "source": "inferred"},
+      {"code": "E11.40", "description": "Type 2 diabetes mellitus with diabetic neuropathy, unspecified", "source": "inferred"}
+    ],
+    "soap": {
+      "subjective": "Patient reports feeling tired. Fasting sugars around 140-150 mg/dL, postprandial 190-200 mg/dL. Currently on Metformin 500mg BD. HbA1c 8.2%. Reports tingling in feet at night. No visual blurring.",
+      "objective": "HbA1c 8.2% (target <7%). No visual changes noted. Bilateral foot tingling suggestive of early peripheral neuropathy.",
+      "assessment": "Type 2 diabetes mellitus with suboptimal glycemic control (HbA1c 8.2%) and early diabetic peripheral neuropathy.",
+      "plan": "1. Increase Metformin to 500mg TDS. 2. Start Vitamin B12 supplement. 3. Daily walking 30 minutes. 4. Food diary, reduce rice/maida. 5. Follow-up in 4 weeks with repeat sugars. 6. Return sooner if neuropathy worsens."
+    }
+  }
+}

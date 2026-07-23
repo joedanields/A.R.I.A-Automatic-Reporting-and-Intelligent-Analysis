@@ -1,0 +1,27 @@
+Doctor: Namaste. Kaise hain aap?
+Patient: Doctor saab, theek hain. Lekin sar dard rehta hai subah se.
+Doctor: Sar dard? Kahan hota hai? Front ya back?
+Patient: Dono taraf hota hai, doctor. Kabhi kabhi bahut zyada ho jata hai.
+Doctor: Kya aap dawai le rahe hain BP ki?
+Patient: Haan, Amlodipine 5mg roz raat ko leta hoon.
+Doctor: Aur BP kitna aata hai ghar pe?
+Patient: Subah 150/95 hota hai. Shaam ko thoda kam, 140/90.
+Doctor: Yeh bahut high hai. Humko 130 se neeche lana hai. Aapki dawai ka dose kam pad raha hai.
+Patient: Kya dose badhana padega, doctor?
+Doctor: Haan. Main Amlodipine 5mg ko 10mg kar deta hoon. Aur ek aur dawai add karta hoon, Telmisartan 40mg.
+Patient: Telmisartan? Yeh kya hai?
+Doctor: Yeh ek ARB hai, bahut achhi dawai hai BP ke liye. Isse aapko sar dard bhi kam hoga.
+Patient: Koi side effect toh nahi hoga?
+Patient: Koi side effect toh nahi hoga?
+Doctor: Kabhi kabhi chakkar aa sakte hain pehle kuch din. Agar ho toh mujhe batana. Aur roz subah khali pet BP check karo aur likho.
+Patient: Theek hai, doctor.
+Doctor: Aur ek baat, namak kam khao. Aap kitna namak lete ho roz?
+Patient: Doctor, mujhe namak bahut pasand hai. Chutney bhi bahut khata hoon.
+Doctor: Yeh sab chhodna padega. High BP aur namak ka bahut relation hai. Kam se kam aadha namak karo pehle.
+Patient: Theek hai, doctor. Koshish karunga.
+Doctor: Aur exercise karte ho?
+Patient: Nahi, doctor. Baith ke kaam karta hoon, office mein.
+Doctor: Roz 20 minute walk karo. Bahut zaroori hai. Agar BP control nahi hota, hum aur dawai dalenge.
+Patient: Done, doctor. Thank you.
+Doctor: 3 hafta baad follow-up aana hai. Saath mein blood reports bhi le aana.
+Patient: Haan ji, thank you doctor saab.

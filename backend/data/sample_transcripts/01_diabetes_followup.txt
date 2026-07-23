@@ -1,0 +1,22 @@
+Doctor: Good morning. How are you feeling today?
+Patient: Good morning, doctor. I'm okay, but I've been feeling a bit tired lately.
+Doctor: I see. Let's go through your numbers. What's your fasting sugar been like?
+Patient: It's around 140 in the mornings. Sometimes 150.
+Doctor: And after meals?
+Patient: After lunch it goes up to about 190, 200 sometimes.
+Doctor: Alright. Are you taking your Metformin regularly?
+Patient: Yes, I take 500mg twice a day, with breakfast and dinner.
+Doctor: Good. Any nausea or stomach upset?
+Patient: No, no problems with that.
+Doctor: Have you checked your HbA1c recently?
+Patient: I did the blood test last week. The lab said it was 8.2.
+Doctor: Okay, 8.2 is a bit higher than we'd like. Ideally we want it below 7. Any blurring of vision or numbness in your feet?
+Patient: No blurring. But sometimes my feet feel a little tingly at night.
+Doctor: That could be early neuropathy. We should keep a close eye on that. Let me increase your Metformin to 500mg three times a day, and I'll also start you on a Vitamin B12 supplement since long-term Metformin can deplete it.
+Patient: Okay, doctor.
+Doctor: I'd also like you to walk for at least 30 minutes a day. Even a 15-minute walk after each meal helps.
+Patient: I'll try. I used to walk in the morning but got lazy.
+Doctor: It's important, especially with the neuropathy symptoms. Also, keep a food diary this month. Cut down on rice and maida.
+Patient: Alright, doctor. Thank you.
+Doctor: Come back in 4 weeks. We'll recheck your sugars and see if the dose change helps. If the tingling gets worse, come in sooner.
+Patient: Thank you, doctor.
