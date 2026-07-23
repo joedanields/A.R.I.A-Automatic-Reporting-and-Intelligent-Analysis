@@ -50,3 +50,9 @@ class AgentState(TypedDict):
 
     # F10: Drug interaction warnings
     drug_interactions: list[dict]
+
+    # F5: Language segments from code-switch ASR
+    language_segments: list[dict]
+
+    # F6: Speaker diarization segments
+    speakers: list[dict]
