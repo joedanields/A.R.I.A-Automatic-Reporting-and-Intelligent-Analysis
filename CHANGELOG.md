@@ -7,6 +7,45 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [0.4.0] - 2026-07-23
 
 ### Added
+- **F10: Drug Interaction Checker** — Cross-references medications for dangerous combinations
+  - `data/drug_interactions.json` with 233K interactions from DDInter (13 ATC categories)
+  - `services/interaction_checker.py` with fuzzy drug matching and severity ranking
+  - Severity: Major (contraindicated), Moderate (use with caution), Minor (monitor)
+  - Integrates into coder agent pipeline
+  - REST: `/api/interactions`, `/api/interactions/check`, `/api/interactions/search`
+  - 26 interaction checker tests
+
+- **F5: Code-Switch ASR** — Multilingual model for Hindi/regional language support
+  - `services/asr_router.py` with language detection and routing
+  - Transcriber switched to multilingual `tiny` model (99 languages, ~1GB VRAM)
+  - Auto-detects language per chunk (Hindi, Tamil, Telugu, Kannada, Marathi, Bengali, etc.)
+  - Language-specific initial prompts for medical vocabulary
+  - `language_segments` in AgentState
+  - 21 ASR router tests
+
+- **F6: Speaker Diarization** — Separates doctor vs patient speech
+  - `services/diarization.py` using sherpa-onnx VAD (CPU-only, zero GPU impact)
+  - Speaker labels: SPEAKER_00 (patient), SPEAKER_01 (doctor)
+  - VAD-based segmentation with gap-based speaker assignment
+  - `speakers` in AgentState
+  - WebSocket: speaker segments in transcript events
+  - REST: `/api/diarization`
+  - 17 diarization tests
+
+- **F17: Multimodal Lab/Prescription Intake (OCR)** — Scans prescriptions and lab reports
+  - `services/ocr_service.py` using natocr (Windows Runtime OCR)
+  - No external binary needed — uses Windows built-in OCR
+  - Extracts: drug names, dosages, lab values, vital signs, dates
+  - REST: `/api/ocr`, `/api/ocr/scan`
+  - 14 OCR service tests
+
+### Changed
+- Transcriber default model changed from `small` to `tiny` (multilingual, same VRAM)
+- `TranscriptSegment` now includes `language` and `language_probability` fields
+- `AgentState` now includes `drug_interactions`, `language_segments`, `speakers`
+- Coder agent runs drug interaction check after coding
+- WebSocket transcript events include language and speaker info
+- `.gitignore` updated for `.db`, `.record_key`, `chroma_db/`, `models/`
 - **F11: ICD-11 Multi-System Support** — ICD-11 alongside ICD-10
   - `data/icd11_sample.json` with 20 ICD-11 codes
   - `CodeRefers` multi-system retriever with `collections` dict
