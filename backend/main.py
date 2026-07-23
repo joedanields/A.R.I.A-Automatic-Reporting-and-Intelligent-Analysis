@@ -26,6 +26,7 @@ from services.learning_store import get_learning_store
 from services.patient_summary import generate_patient_summary, get_supported_languages
 from services.auth import get_auth_service
 from services.audit import get_audit_log
+from services.interaction_checker import get_interaction_checker
 from agent_graph import process_transcript_streaming, process_transcript
 
 # =============================================================================
@@ -1038,6 +1039,58 @@ async def correct_drug_names(request: TranscriptRequest):
         "success": True,
         **result,
     })
+
+
+# =============================================================================
+# Drug Interaction Checker (F10)
+# =============================================================================
+
+class InteractionCheckRequest(BaseModel):
+    drug_names: list[str]
+
+
+@app.get("/api/interactions")
+async def get_interactions_info():
+    """Get interaction database stats."""
+    checker = get_interaction_checker()
+    return JSONResponse({
+        "success": True,
+        **checker.get_stats(),
+    })
+
+
+@app.get("/api/interactions/search")
+async def search_interaction_drugs(q: str):
+    """Search drugs in interaction database (fuzzy)."""
+    checker = get_interaction_checker()
+    results = checker.search_drugs(q)
+    return JSONResponse({
+        "success": True,
+        "query": q,
+        "results": results,
+    })
+
+
+@app.get("/api/interactions/drug/{drug_name}")
+async def get_drug_interactions(drug_name: str):
+    """Get all interactions for a specific drug."""
+    checker = get_interaction_checker()
+    info = checker.get_drug_info(drug_name)
+    if not info:
+        raise HTTPException(status_code=404, detail=f"Drug '{drug_name}' not found")
+    return JSONResponse({"success": True, **info})
+
+
+@app.post("/api/interactions/check")
+async def check_interactions(request: InteractionCheckRequest):
+    """Check a list of drugs for interactions."""
+    try:
+        checker = get_interaction_checker()
+        result = checker.check(request.drug_names)
+        return JSONResponse({"success": True, **result})
+    except Exception as e:
+        logger.error(f"Interaction check error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # =============================================================================
