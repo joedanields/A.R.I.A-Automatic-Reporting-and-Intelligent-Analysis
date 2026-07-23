@@ -27,6 +27,7 @@ from services.patient_summary import generate_patient_summary, get_supported_lan
 from services.auth import get_auth_service
 from services.audit import get_audit_log
 from services.interaction_checker import get_interaction_checker
+from services.diarization import get_diarization_service
 from agent_graph import process_transcript_streaming, process_transcript
 
 # =============================================================================
@@ -116,21 +117,37 @@ class AudioBuffer:
 async def process_audio_chunk(audio_bytes: bytes, websocket: WebSocket) -> Optional[str]:
     """
     Process an audio chunk through Whisper.
-    
+
+    F5: Includes detected language per segment.
+    F6: Includes speaker diarization when available.
+
     Args:
         audio_bytes: Raw audio data
         websocket: WebSocket for sending updates
-    
+
     Returns:
         Transcribed text or None
     """
     try:
         transcriber = get_transcriber()
         segments = list(transcriber.transcribe_audio_chunk(audio_bytes))
-        
+
         if segments:
             text = " ".join([seg.text for seg in segments])
-            
+
+            # F5: Include language info
+            detected_lang = segments[0].language if segments else "en"
+            lang_prob = segments[0].language_probability if segments else 1.0
+
+            # F6: Run diarization if available
+            speaker_segments = []
+            try:
+                diarization = get_diarization_service()
+                if diarization.is_available():
+                    speaker_segments = diarization.diarize(audio_bytes)
+            except Exception as de:
+                logger.debug(f"Diarization skipped: {de}")
+
             # Send transcript event
             await manager.send_json(websocket, {
                 "type": "transcript",
@@ -141,14 +158,26 @@ async def process_audio_chunk(audio_bytes: bytes, websocket: WebSocket) -> Optio
                             "text": seg.text,
                             "start": seg.start,
                             "end": seg.end,
-                            "confidence": seg.confidence
+                            "confidence": seg.confidence,
+                            "language": seg.language,
+                            "language_probability": seg.language_probability,
                         }
                         for seg in segments
+                    ],
+                    "detected_language": detected_lang,
+                    "language_probability": lang_prob,
+                    "speakers": [
+                        {
+                            "start": s.start,
+                            "end": s.end,
+                            "speaker": s.speaker,
+                        }
+                        for s in speaker_segments
                     ],
                     "timestamp": datetime.now().isoformat()
                 }
             })
-            
+
             return text
         
         return None
@@ -1091,6 +1120,20 @@ async def check_interactions(request: InteractionCheckRequest):
     except Exception as e:
         logger.error(f"Interaction check error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# =============================================================================
+# Speaker Diarization (F6)
+# =============================================================================
+
+@app.get("/api/diarization")
+async def diarization_info():
+    """Get diarization service status and model info."""
+    service = get_diarization_service()
+    return JSONResponse({
+        "success": True,
+        **service.get_model_info(),
+    })
 
 
 # =============================================================================
